@@ -1,0 +1,20 @@
+{
+  "tkinterdnd2": {
+    "files": [
+      {
+        "source": "tcl/tkdnd2.8",
+        "dest": "tcl/tkdnd2.8",
+        "platform": ["win32", "linux", "darwin"]
+      }
+    ]
+  },
+  "opencv-python": {
+    "files": [
+      {
+        "source": "Lib/site-packages/cv2",
+        "dest": "cv2",
+        "platform": ["win32"]
+      }
+    ]
+  }
+}
