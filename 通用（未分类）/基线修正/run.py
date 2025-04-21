@@ -9,7 +9,7 @@ import matplotlib as mpl
 
 # ---------------------- 可配置参数 ----------------------
 # 数据预处理与信号平滑参数
-SMOOTHING_WINDOW = 31    # Savitzky–Golay 滤波窗口长度（必须为奇数）
+SMOOTHING_WINDOW = 21    # Savitzky–Golay 滤波窗口长度（必须为奇数）
 POLYORDER = 3            # 多项式阶数
 
 # 波谷检测参数（用于分段）
@@ -99,6 +99,7 @@ def segment_by_valleys(x, y, smoothing_window=SMOOTHING_WINDOW, polyorder=POLYOR
         if valid_valleys[-1] != len(y) - 1:
             valid_valleys = np.r_[valid_valleys, len(y) - 1]
         valley_indices = valid_valleys
+
     segments = []
     for i in range(len(valley_indices) - 1):
         idx = np.arange(valley_indices[i], valley_indices[i + 1] + 1)
@@ -115,7 +116,7 @@ def correct_segment_by_valley(y_seg):
     分段两步扣除基线后，返回最终数据、基线信息和振幅：
       1. 第一阶段：以该段最小值作为原始基线扣除，使该段最低归 0。
       2. 第二阶段：在第一次扣除结果中，筛选出所有小于 0.1 的数值，
-         计算中位数作为二次基线扣除，使波谷部分归 0。
+         计算中位数作为二次基线扣除，使得波谷部分归 0。
     """
     original_baseline = np.min(y_seg)
     y_corr_stage1 = y_seg - original_baseline
@@ -129,7 +130,7 @@ def correct_segment_by_valley(y_seg):
 def baseline_correction_by_valleys(x, y, smoothing_window=SMOOTHING_WINDOW, polyorder=POLYORDER):
     """
     先调用 segment_by_valleys 将信号分割成各个波周期，
-    然后对每个分段调用 correct_segment_by_valley 进行两步基线扣除，
+    然后对每个周期调用 correct_segment_by_valley 进行两步基线扣除，
     得到最终扣除后的完整信号、各周期分段信息、基线信息及振幅变化量。
     返回：
       - y_corrected：扣除基线后的完整信号（与 x 长度一致）
@@ -169,9 +170,8 @@ def get_valid_files(folder_path):
 def annotate_plot(ax, segments, amplitudes, threshold=0.2):
     """
     在图中标注振幅和重新编号后的波段编号。
-    先筛选出振幅大于或等于 threshold 的波段，然后依次重新编号并标注。
+    先筛选出振幅大于或等于 threshold 的波段，再依次重新编号后进行标注。
     """
-    # 筛选
     filtered = [(seg, amp) for seg, amp in zip(segments, amplitudes) if amp >= threshold]
     for j, (seg, amp) in enumerate(filtered):
         new_idx = j + 1
@@ -219,33 +219,36 @@ def main():
         output_folder = os.path.join(file_dir, "基线修正")
         os.makedirs(output_folder, exist_ok=True)
 
+        # 同级建立 dR-fit 文件夹
+        dR_fit_folder = os.path.join(file_dir, "dR-fit")
+        os.makedirs(dR_fit_folder, exist_ok=True)
+
         original_name = os.path.basename(file_path)
         base_name = original_name[:-4] if original_name.lower().endswith(".txt") else original_name
 
-        # 保存处理后的数据文件（Time(s), dR1(Ω), dR2(Ω)）
+        # 保存处理后的数据文件（Time(s), dR1(Ω), dR2(Ω)），放在“基线修正”文件夹中
         data_output_path = os.path.join(output_folder, base_name + ".txt")
         processed_data = np.column_stack((x, y1_corr, y2_corr))
         header = "Time(s)\tdR1(Ω)\tdR2(Ω)"
         np.savetxt(data_output_path, processed_data, delimiter="\t", header=header, comments="")
         print(f"已保存处理数据至: {data_output_path}")
 
-        # 生成 dR-fit 数据 —— 筛选振幅 >= 0.2 的波段，并重新编号
+        # 生成 dR-fit 数据 —— 筛选振幅 >= 0.2 的波段并重新编号
         dR1_filtered = [(j + 1, amp) for j, amp in enumerate(amp for amp in amps1 if amp >= 0.2)]
         dR2_filtered = [(j + 1, amp) for j, amp in enumerate(amp for amp in amps2 if amp >= 0.2)]
-        dR_fit_path = os.path.join(output_folder, f"{base_name}-dR-fit.txt")
+        dR_fit_path = os.path.join(dR_fit_folder, f"{base_name}-dR-fit.txt")
         with open(dR_fit_path, "w", encoding="utf-8") as f:
             f.write("X1\tdR1(Ω)\tX2\tdR2(Ω)\n")
             max_len = max(len(dR1_filtered), len(dR2_filtered))
             for i in range(max_len):
-                # 如果某一列没有数据，写入空字符串
                 x1_val, dr1_val = dR1_filtered[i] if i < len(dR1_filtered) else ("", "")
                 x2_val, dr2_val = dR2_filtered[i] if i < len(dR2_filtered) else ("", "")
                 f.write(f"{x1_val}\t{dr1_val}\t{x2_val}\t{dr2_val}\n")
         print(f"已保存 dR-fit 文件至: {dR_fit_path}")
 
-        # 绘制图形（带标注版本）
+        # 绘制图形（带标注版本），并保存至 dR-fit 文件夹
         plt.figure(figsize=(12, 10))
-        # y1 部分
+        # y1 部分标注
         ax1 = plt.subplot(2, 1, 1)
         plt.plot(x, y1, label="原始 y1", alpha=0.5)
         plt.plot(x, y1_corr, label="扣除基线后 y1", linewidth=2)
@@ -258,6 +261,7 @@ def main():
         plt.title(f"{os.path.basename(file_path)} - y1 扣除基线（带标注）")
         plt.legend()
 
+        # y2 部分标注
         ax2 = plt.subplot(2, 1, 2)
         plt.plot(x, y2, label="原始 y2", alpha=0.5)
         plt.plot(x, y2_corr, label="扣除基线后 y2", linewidth=2)
@@ -269,14 +273,14 @@ def main():
         plt.ylabel("y2")
         plt.title(f"{os.path.basename(file_path)} - y2 扣除基线（带标注）")
         plt.legend()
-        plt.tight_layout()
 
-        image_output_path_annot = os.path.join(output_folder, base_name + "-annotated.png")
+        plt.tight_layout()
+        image_output_path_annot = os.path.join(dR_fit_folder, base_name + "-annotated.png")
         plt.savefig(image_output_path_annot)
         print(f"已保存带标注图形至: {image_output_path_annot}")
         plt.close()
 
-        # 绘制图形（无标注版本）
+        # 绘制图形（无标注版本），保存到“基线修正”文件夹中
         plt.figure(figsize=(12, 10))
         plt.subplot(2, 1, 1)
         plt.plot(x, y1, label="原始 y1", alpha=0.5)
