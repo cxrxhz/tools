@@ -1,0 +1,44 @@
+[
+    {
+        "timestamp": "2025-05-22 15:01:29",
+        "records": {
+            "MnPS3": {
+                "蔡司": {
+                    "A7": [
+                        {
+                            "file": "4-5-500.jpg",
+                            "dest": "C:/Users/xhz/OneDrive - tongji.edu.cn/实验数据\\MnPS3\\蔡司\\A7\\4-5-500.jpg",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "4-5-500.jpg_meta.xml",
+                            "dest": "C:/Users/xhz/OneDrive - tongji.edu.cn/实验数据\\MnPS3\\蔡司\\A7\\4-5-500.jpg_meta.xml",
+                            "action": "新复制"
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        "timestamp": "2025-05-22 15:02:09",
+        "records": {
+            "MnPS3": {
+                "蔡司": {
+                    "A7": [
+                        {
+                            "file": "4-4-1000.jpg",
+                            "dest": "C:/Users/xhz/OneDrive - tongji.edu.cn/实验数据\\MnPS3\\蔡司\\A7\\4-4-1000.jpg",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "4-4-1000.jpg_meta.xml",
+                            "dest": "C:/Users/xhz/OneDrive - tongji.edu.cn/实验数据\\MnPS3\\蔡司\\A7\\4-4-1000.jpg_meta.xml",
+                            "action": "新复制"
+                        }
+                    ]
+                }
+            }
+        }
+    }
+]
