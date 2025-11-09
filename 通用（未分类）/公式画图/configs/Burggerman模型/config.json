@@ -1,0 +1,12 @@
+{
+  "formula": "y = 1/4 * ( kf*(3*x - 1) + km*(3*(1 - x) - 1)\n            + sqrt( (kf*(3*x - 1) + km*(3*(1 - x) - 1))^2 + 8*kf*km ) )",
+  "params": {
+    "kf": "100",
+    "km": "0.208"
+  },
+  "xrange": [
+    0.0,
+    0.16
+  ],
+  "model_name": "Burggerman模型"
+}

@@ -1,0 +1,14 @@
+{
+  "formula": "y = km*(1 + 2*(13.3347*exp(-(13.2701*Rc)/(km*L0)))*((kf/km - 1)/(kf/km + 1))*x) / (1 - (13.3347*exp(-(13.2701*Rc)/(km*L0)))*((kf/km - 1)/(kf/km + 1))*x)",
+  "params": {
+    "L0": "1e-6",
+    "Rc": "2e-8",
+    "kf": "100",
+    "km": "0.208"
+  },
+  "xrange": [
+    0.0,
+    0.16
+  ],
+  "model_name": "改进Hashin–Shtrikman 模型"
+}

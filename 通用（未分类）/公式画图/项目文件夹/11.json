@@ -1,0 +1,56 @@
+{
+  "xrange": [
+    0.0,
+    0.16
+  ],
+  "models": [
+    {
+      "formula": "y = exp( x*c2*ln(kf) + (1 - x)*ln(c1*km) )",
+      "params": {
+        "c1": "1.0",
+        "c2": "1.0",
+        "kf": "100",
+        "km": "0.208"
+      },
+      "model_name": "Agari模型"
+    },
+    {
+      "formula": "y = 1/4 * ( kf*(3*x - 1) + km*(3*(1 - x) - 1)\n            + sqrt( (kf*(3*x - 1) + km*(3*(1 - x) - 1))^2 + 8*kf*km ) )",
+      "params": {
+        "kf": "100",
+        "km": "0.208"
+      },
+      "model_name": "Burggerman模型"
+    },
+    {
+      "formula": "y = km * ( (kf + 2*km + 2*x*(kf - km)) / (kf + 2*km - x*(kf - km)) )",
+      "params": {
+        "kf": "100",
+        "km": "0.208"
+      },
+      "model_name": "MG模型"
+    },
+    {
+      "formula": "y = km*( 3 + x*( 2*( d*(kf - km) - 2*Rc*kf*km )/( d*(kf + km) + 2*Rc*kf*km )\n                 + ( L*(kf - km) - 2*Rc*kf*km )/( L*km + 2*Rc*kf*km ) ) )\n    / ( 3 - x*( 2*( d*(kf - km) - 2*Rc*kf*km )/( d*(kf + km) + 2*Rc*kf*km ) ) )",
+      "params": {
+        "L": "1e-6",
+        "Rc": "4e-8",
+        "d": "1e-6",
+        "kf": "100",
+        "km": "0.208"
+      },
+      "model_name": "Nan模型"
+    },
+    {
+      "formula": "y = km*(1 + 2*(13.3347*exp(-(13.2701*Rc)/(km*L0)))*((kf/km - 1)/(kf/km + 1))*x) / (1 - (13.3347*exp(-(13.2701*Rc)/(km*L0)))*((kf/km - 1)/(kf/km + 1))*x)",
+      "params": {
+        "L0": "1e-6",
+        "Rc": "2e-8",
+        "kf": "100",
+        "km": "0.208"
+      },
+      "model_name": "改进Hashin–Shtrikman 模型"
+    }
+  ],
+  "exp_data_file": "C:/xhz/PY project/pythonProject/通用（未分类）/公式画图/configs/11.csv"
+}

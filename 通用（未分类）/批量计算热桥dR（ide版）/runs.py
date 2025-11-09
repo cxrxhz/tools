@@ -1,4 +1,5 @@
 import os
+import re
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import linregress
@@ -64,17 +65,18 @@ overall_dR2_values = []
 for subdir in os.listdir(root_directory):
     subdir_path = os.path.join(root_directory, subdir)
     if os.path.isdir(subdir_path):
-        # Initialize lists to store results for this datasetD
-        temperatures = []
-        dR1_values = []
-        dR2_values = []
-        # Process each file in the subdirectory
         for file_name in os.listdir(subdir_path):
-            if file_name.endswith('.txt'):
-                try:
-                    temperature = int(file_name.split('K')[0])
-                except ValueError:
-                    # 跳过不包含温度信息的文件
+            if file_name.lower().endswith('.txt'):
+                # 使用正则表达式提取温度
+                match = re.search(r'(\d+(?:\.\d+)?)K', file_name)
+                if not match:
+                    continue
+                temperature = float(match.group(1))
+                file_path = os.path.join(subdir_path, file_name)
+                title = f"{file_name} (T={temperature})"
+                # 创建图形对象
+                fig, dR1, dR2 = create_figure_for_file(file_path, title)
+                if fig is None:
                     continue
 
                 file_path = os.path.join(subdir_path, file_name)

@@ -40,5 +40,889 @@
                 }
             }
         }
+    },
+    {
+        "timestamp": "2025-05-29 12:44:41",
+        "records": {
+            "MnPS3": {
+                "蔡司": {
+                    "PDMS": [
+                        {
+                            "file": "3.168-2.244.jpg",
+                            "dest": "C:/Users/xhz/OneDrive - tongji.edu.cn/实验数据\\MnPS3\\蔡司\\PDMS\\P1\\3.168-2.244.jpg",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "3.168-2.244.jpg_meta.xml",
+                            "dest": "C:/Users/xhz/OneDrive - tongji.edu.cn/实验数据\\MnPS3\\蔡司\\PDMS\\P1\\3.168-2.244.jpg_meta.xml",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "3.446-2.359.jpg",
+                            "dest": "C:/Users/xhz/OneDrive - tongji.edu.cn/实验数据\\MnPS3\\蔡司\\PDMS\\P1\\3.446-2.359.jpg",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "3.446-2.359.jpg_meta.xml",
+                            "dest": "C:/Users/xhz/OneDrive - tongji.edu.cn/实验数据\\MnPS3\\蔡司\\PDMS\\P1\\3.446-2.359.jpg_meta.xml",
+                            "action": "新复制"
+                        }
+                    ]
+                }
+            },
+            "SiNW": {
+                "蔡司": {
+                    "B5": [
+                        {
+                            "file": "4-1-anneal300.jpg",
+                            "dest": "C:/Users/xhz/OneDrive - tongji.edu.cn/实验数据\\SiNW\\蔡司\\B5\\4-1-anneal300.jpg",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "4-1-anneal350.jpg",
+                            "dest": "C:/Users/xhz/OneDrive - tongji.edu.cn/实验数据\\SiNW\\蔡司\\B5\\4-1-anneal350.jpg",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "4-1-anneal350.jpg_meta.xml",
+                            "dest": "C:/Users/xhz/OneDrive - tongji.edu.cn/实验数据\\SiNW\\蔡司\\B5\\4-1-anneal350.jpg_meta.xml",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "4-1-broken.jpg",
+                            "dest": "C:/Users/xhz/OneDrive - tongji.edu.cn/实验数据\\SiNW\\蔡司\\B5\\4-1-broken.jpg",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "4-1-broken.jpg_meta.xml",
+                            "dest": "C:/Users/xhz/OneDrive - tongji.edu.cn/实验数据\\SiNW\\蔡司\\B5\\4-1-broken.jpg_meta.xml",
+                            "action": "新复制"
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        "timestamp": "2025-05-29 13:33:50",
+        "records": {
+            "SiNW": {
+                "SEM": {
+                    "B5": [
+                        {
+                            "file": "4-1-350anneal-2.tif",
+                            "dest": "C:/Users/xhz/OneDrive - tongji.edu.cn/实验数据\\SiNW\\SEM\\B5\\4-1-350anneal-2.tif",
+                            "action": "新复制"
+                        }
+                    ],
+                    "B6": [
+                        {
+                            "file": "4-1-350anneal.tif",
+                            "dest": "C:/Users/xhz/OneDrive - tongji.edu.cn/实验数据\\SiNW\\SEM\\B6\\4-1-350anneal.tif",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "4-3-350anneal.tif",
+                            "dest": "C:/Users/xhz/OneDrive - tongji.edu.cn/实验数据\\SiNW\\SEM\\B6\\4-3-350anneal.tif",
+                            "action": "新复制"
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        "timestamp": "2025-06-11 15:31:12",
+        "records": {
+            "SiNW": {
+                "e-beam": {
+                    "B2": [
+                        {
+                            "file": "300Rh-40uA.bmp",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B2\\5-2\\300Rh-40uA.bmp",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "300Rh-70uA.bmp",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B2\\5-2\\300Rh-70uA.bmp",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "300Rh-pt40uA.bmp",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B2\\5-2\\300Rh-pt40uA.bmp",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "300Rh-pt70uA.bmp",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B2\\5-2\\300Rh-pt70uA.bmp",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "300Rh-test.bmp",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B2\\5-2\\300Rh-test.bmp",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "300Rs-40uA.bmp",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B2\\5-2\\300Rs-40uA.bmp",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "300Rs-70uA.bmp",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B2\\5-2\\300Rs-70uA.bmp",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "300Rs-pt40uA.bmp",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B2\\5-2\\300Rs-pt40uA.bmp",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "300Rs-pt70uA.bmp",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B2\\5-2\\300Rs-pt70uA.bmp",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "300Rs-test.bmp",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B2\\5-2\\300Rs-test.bmp",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "40uA.txt",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B2\\5-2\\40uA.txt",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "70uA.txt",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B2\\5-2\\70uA.txt",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "pt40u.txt",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B2\\5-2\\pt40u.txt",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "pt70u.txt",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B2\\5-2\\pt70u.txt",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "test.txt",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B2\\5-2\\test.txt",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "40uA-300.00K.txt",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B2\\5-2\\RhRsData\\40uA-300.00K.txt",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "70uA-300.00K.txt",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B2\\5-2\\RhRsData\\70uA-300.00K.txt",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "pt40uA-300.00K.txt",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B2\\5-2\\RhRsData\\pt40uA-300.00K.txt",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "pt70uA-300.00K.txt",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B2\\5-2\\RhRsData\\pt70uA-300.00K.txt",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "test-300.00K.txt",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B2\\5-2\\RhRsData\\test-300.00K.txt",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "300Rh-30uA.bmp",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B2\\5-3\\300Rh-30uA.bmp",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "300Rh-70uA.bmp",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B2\\5-3\\300Rh-70uA.bmp",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "300Rs-30uA.bmp",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B2\\5-3\\300Rs-30uA.bmp",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "300Rs-70uA.bmp",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B2\\5-3\\300Rs-70uA.bmp",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "30uA.txt",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B2\\5-3\\30uA.txt",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "70uA.txt",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B2\\5-3\\70uA.txt",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "30uA-300.00K.txt",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B2\\5-3\\RhRsData\\30uA-300.00K.txt",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "70uA-300.00K.txt",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B2\\5-3\\RhRsData\\70uA-300.00K.txt",
+                            "action": "新复制"
+                        }
+                    ],
+                    "B3": [
+                        {
+                            "file": "300Rh-5.0 10kV bridge.bmp",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B3\\4-4\\300Rh-5.0 10kV bridge.bmp",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "300Rs-5.0 10kV bridge.bmp",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B3\\4-4\\300Rs-5.0 10kV bridge.bmp",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0 1.txt",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B3\\4-4\\5.0 1.txt",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "scan1 5.0 10kv",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B3\\4-4\\2025_3_24\\scan1 5.0 10kv",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "scan2 5.0 10kv",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B3\\4-4\\2025_3_24\\scan2 5.0 10kv",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "scan3 5.0 10kv",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B3\\4-4\\2025_3_24\\scan3 5.0 10kv",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "scan4 5.0 10kv",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B3\\4-4\\2025_3_24\\scan4 5.0 10kv",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0 10kV scan1",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B3\\4-4\\2025_3_25\\5.0 10kV scan1",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0 10kV scan2",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B3\\4-4\\2025_3_25\\5.0 10kV scan2",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0 10kV scan2-1",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B3\\4-4\\2025_3_31\\5.0 10kV scan2-1",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0 10kV scan3-1",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B3\\4-4\\2025_4_1\\5.0 10kV scan3-1",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0 10kV scan3-1-1",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B3\\4-4\\2025_4_1\\5.0 10kV scan3-1-1",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0 10kV scan3-1-2",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B3\\4-4\\2025_4_1\\5.0 10kV scan3-1-2",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0 10kV scan3-1-3",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B3\\4-4\\2025_4_1\\5.0 10kV scan3-1-3",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0 10kV scan3-1-4",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B3\\4-4\\2025_4_1\\5.0 10kV scan3-1-4",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0 10kV scan3-2",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B3\\4-4\\2025_4_1\\5.0 10kV scan3-2",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0 10kV scan3-3",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B3\\4-4\\2025_4_1\\5.0 10kV scan3-3",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0 10kV scan3-4",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B3\\4-4\\2025_4_1\\5.0 10kV scan3-4",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0 10kV scan3-5",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B3\\4-4\\2025_4_1\\5.0 10kV scan3-5",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0 10kV scan3-6",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B3\\4-4\\2025_4_1\\5.0 10kV scan3-6",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0 10kV scan3-7",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B3\\4-4\\2025_4_1\\5.0 10kV scan3-7",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "test",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B3\\4-4\\2025_4_1\\test",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0 10kV bridge-300.00K.txt",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B3\\4-4\\RhRsData\\5.0 10kV bridge-300.00K.txt",
+                            "action": "新复制"
+                        }
+                    ],
+                    "B4": [
+                        {
+                            "file": "300Rh-5.0 10kV bridge.bmp",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-1\\300Rh-5.0 10kV bridge.bmp",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "300Rh-5.0 10kV bridge2.bmp",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-1\\300Rh-5.0 10kV bridge2.bmp",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "300Rs-5.0 10kV bridge.bmp",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-1\\300Rs-5.0 10kV bridge.bmp",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "300Rs-5.0 10kV bridge2.bmp",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-1\\300Rs-5.0 10kV bridge2.bmp",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0 1.txt",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-1\\5.0 1.txt",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0 10kV bridge",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-1\\2025_3_25\\5.0 10kV bridge",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0 10kV scan1",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-1\\2025_3_25\\5.0 10kV scan1",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0 10kV scan2",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-1\\2025_3_25\\5.0 10kV scan2",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0 10kV scan3",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-1\\2025_3_25\\5.0 10kV scan3",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0 10kV scan4",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-1\\2025_3_25\\5.0 10kV scan4",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0 10kV scan5",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-1\\2025_3_25\\5.0 10kV scan5",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0 10kV scan6",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-1\\2025_3_25\\5.0 10kV scan6",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "scan1 5.0 10kv",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-1\\2025_3_25\\scan1 5.0 10kv",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0 10kV scan0",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-1\\2025_4_16\\5.0 10kV scan0",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0 10kV scan1",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-1\\2025_4_16\\5.0 10kV scan1",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0 10kV scan2",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-1\\2025_4_16\\5.0 10kV scan2",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0 10kV scan3",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-1\\2025_4_16\\5.0 10kV scan3",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0 10kV scan4",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-1\\2025_4_16\\5.0 10kV scan4",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0 10kV scan5",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-1\\2025_4_16\\5.0 10kV scan5",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0 10kV scan6",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-1\\2025_4_16\\5.0 10kV scan6",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0 10kV scan7",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-1\\2025_4_16\\5.0 10kV scan7",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0 10kV scan1",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-1\\2025_5_28\\5.0 10kV scan1",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "test",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-1\\2025_5_28\\test",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0 10kV bridge-300.00K.txt",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-1\\RhRsData\\5.0 10kV bridge-300.00K.txt",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0 10kV bridge2-300.00K.txt",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-1\\RhRsData\\5.0 10kV bridge2-300.00K.txt",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "scan1.txt",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-3\\2025_3_20\\scan1.txt",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "scan5.txt",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-3\\2025_3_20\\scan5.txt",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "scan1.txt",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-3\\2025_3_21\\scan1.txt",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "scan2.txt",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-3\\2025_3_21\\scan2.txt",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "scan3.txt",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-3\\2025_3_21\\scan3.txt",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "scan4 5kv sp5.txt",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-3\\2025_3_21\\scan4 5kv sp5.txt",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "scan5 15kv sp5.txt",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-3\\2025_3_21\\scan5 15kv sp5.txt",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "scan6 10kv sp5.txt",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-3\\2025_3_21\\scan6 10kv sp5.txt",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "scan7 10kv sp5.txt",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-3\\2025_3_21\\scan7 10kv sp5.txt",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "n scan1 5.0 10kv.txt",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-3\\2025_3_24\\n scan1 5.0 10kv.txt",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "n scan2 5.0 10kv",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-3\\2025_3_24\\n scan2 5.0 10kv",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "n scan3 5.0 10kv",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-3\\2025_3_24\\n scan3 5.0 10kv",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "n scan4 5.0 10kv",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-3\\2025_3_24\\n scan4 5.0 10kv",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "scan10 5.0 10kv.txt",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-3\\2025_3_24\\scan10 5.0 10kv.txt",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "scan8 5.0 10kv.txt",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-3\\2025_3_24\\scan8 5.0 10kv.txt",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "scan9 5.0 10kv.txt",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-3\\2025_3_24\\scan9 5.0 10kv.txt",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "test.txt",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B4\\4-3\\2025_3_24\\test.txt",
+                            "action": "新复制"
+                        }
+                    ],
+                    "B6": [
+                        {
+                            "file": "10kv-spot4.5-1",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B6\\4-1\\2025_6_10\\10kv-spot4.5-1",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "10kv-spot4.5-2",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B6\\4-1\\2025_6_10\\10kv-spot4.5-2",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "10kv-spot4.5-3",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B6\\4-1\\2025_6_10\\10kv-spot4.5-3",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "10kv-spot4.5-4",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B6\\4-1\\2025_6_10\\10kv-spot4.5-4",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "10kv-spot4.5-5",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B6\\4-1\\2025_6_10\\10kv-spot4.5-5",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "10kv-spot4.5-6",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B6\\4-1\\2025_6_11\\10kv-spot4.5-6",
+                            "action": "新复制"
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        "timestamp": "2025-06-12 11:34:05",
+        "records": {
+            "SiNW": {
+                "SEM": {
+                    "B5": [
+                        {
+                            "file": "4-1-400anneal.tif",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\SEM\\B5\\4-1-400anneal.tif",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "4-1-450anneal.tif",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\SEM\\B5\\4-1-450anneal.tif",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "4-1-500anneal.tif",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\SEM\\B5\\4-1-500anneal.tif",
+                            "action": "新复制"
+                        }
+                    ],
+                    "B6": [
+                        {
+                            "file": "4-1-500anneal.tif",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\SEM\\B6\\4-1-500anneal.tif",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "4-1-600anneal.tif",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\SEM\\B6\\4-1-600anneal.tif",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "4-3-500anneal.tif",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\SEM\\B6\\4-3-500anneal.tif",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "4-1-6.tif",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\SEM\\B6\\scan\\4-1-6.tif",
+                            "action": "新复制"
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        "timestamp": "2025-06-12 11:53:20",
+        "records": {
+            "SiNW": {
+                "SEM": {
+                    "B6": [
+                        {
+                            "file": "4-1-600anneal2.tif",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\SEM\\B6\\4-1-600anneal2.tif",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "4-3-600anneal-electrode.tif",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\SEM\\B6\\4-3-600anneal-electrode.tif",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "4-3-600anneal.tif",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\SEM\\B6\\4-3-600anneal.tif",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "4-3-600anneal2.tif",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\SEM\\B6\\4-3-600anneal2.tif",
+                            "action": "新复制"
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        "timestamp": "2025-06-24 11:46:51",
+        "records": {
+            "SiNW": {
+                "e-beam": {
+                    "B6": [
+                        {
+                            "file": "300Rh-5.0 10kV bridge2.bmp",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B6\\4-1\\300Rh-5.0 10kV bridge2.bmp",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "300Rs-5.0 10kV bridge2.bmp",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B6\\4-1\\300Rs-5.0 10kV bridge2.bmp",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0 1.txt",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B6\\4-1\\5.0 1.txt",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0 10kV bridge2-300.00K.txt",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B6\\4-1\\RhRsData\\5.0 10kV bridge2-300.00K.txt",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "300Rh-5.0 10kV bridge2.bmp",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B6\\4-3\\300Rh-5.0 10kV bridge2.bmp",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "300Rs-5.0 10kV bridge2.bmp",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B6\\4-3\\300Rs-5.0 10kV bridge2.bmp",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0 1.txt",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B6\\4-3\\5.0 1.txt",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "10kv-spot4.5-1",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B6\\4-3\\2025_6_13\\10kv-spot4.5-1",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0-10kv-1",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B6\\4-3\\2025_6_13\\5.0-10kv-1",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0-10kv-2",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B6\\4-3\\2025_6_13\\5.0-10kv-2",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0-10kv-3",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B6\\4-3\\2025_6_13\\5.0-10kv-3",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "test.txt",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B6\\4-3\\2025_6_13\\test.txt",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "5.0 10kV bridge2-300.00K.txt",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\e-beam\\B6\\4-3\\RhRsData\\5.0 10kV bridge2-300.00K.txt",
+                            "action": "新复制"
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        "timestamp": "2025-06-24 11:56:48",
+        "records": {
+            "SiNW": {
+                "SEM": {
+                    "B6": [
+                        {
+                            "file": "4-1-d.tif",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\SEM\\B6\\4-1-d.tif",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "4-3-1.tif",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\SEM\\B6\\scan\\4-3-1.tif",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "4-3-2.tif",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\SEM\\B6\\scan\\4-3-2.tif",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "4-3-3.tif",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\SEM\\B6\\scan\\4-3-3.tif",
+                            "action": "新复制"
+                        }
+                    ],
+                    "b7": [
+                        {
+                            "file": "4-1-550a.tif",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\SEM\\b7\\4-1-550a.tif",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "4-1.tif",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\SEM\\b7\\4-1.tif",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "4-1_001.tif",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\SEM\\b7\\4-1_001.tif",
+                            "action": "新复制"
+                        }
+                    ],
+                    "b8": [
+                        {
+                            "file": "4-1-550a.tif",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\SEM\\b8\\4-1-550a.tif",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "4-1.tif",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\SEM\\b8\\4-1.tif",
+                            "action": "新复制"
+                        }
+                    ],
+                    "b9": [
+                        {
+                            "file": "4-1-550a.tif",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\SEM\\b9\\4-1-550a.tif",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "4-1.tif",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\SEM\\b9\\4-1.tif",
+                            "action": "新复制"
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        "timestamp": "2025-07-01 13:26:01",
+        "records": {
+            "SiNW": {
+                "蔡司": {
+                    "b8": [
+                        {
+                            "file": "4-1-1000.jpg",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\蔡司\\b8\\4-1-1000.jpg",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "4-1-1000.jpg_meta.xml",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\蔡司\\b8\\4-1-1000.jpg_meta.xml",
+                            "action": "新复制"
+                        }
+                    ],
+                    "B9": [
+                        {
+                            "file": "4-1-1000.jpg",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\蔡司\\B9\\4-1-1000.jpg",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "4-1-1000.jpg_meta.xml",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\蔡司\\B9\\4-1-1000.jpg_meta.xml",
+                            "action": "新复制"
+                        }
+                    ],
+                    "new tbridge": [
+                        {
+                            "file": "1-1000.jpg",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\蔡司\\new tbridge\\1-1000.jpg",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "1-1000.jpg_meta.xml",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\蔡司\\new tbridge\\1-1000.jpg_meta.xml",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "1-500dry.jpg",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\蔡司\\new tbridge\\1-500dry.jpg",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "1-500dry.jpg_meta.xml",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\蔡司\\new tbridge\\1-500dry.jpg_meta.xml",
+                            "action": "新复制"
+                        }
+                    ]
+                }
+            }
+        }
     }
 ]
