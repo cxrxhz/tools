@@ -11,13 +11,15 @@ from PIL import Image, ImageTk
 
 CONFIG_FILE = "config.json"
 HISTORY_FILE = "sync_history.json"
+IGNORE_FILE = "ignore_samples.json"
 ICON_SIZE = (16, 16)  # 图标大小
 
-###############################
-# 同步记录相关辅助函数
-###############################
+
+############################################
+# 同步记录相关辅助函数（历史记录）
+############################################
 def load_sync_history():
-    """加载历史同步记录，返回列表"""
+    """加载历史同步记录，返回记录列表"""
     if os.path.exists(HISTORY_FILE):
         try:
             with open(HISTORY_FILE, "r", encoding="utf-8") as f:
@@ -26,17 +28,20 @@ def load_sync_history():
             print("加载同步记录失败:", e)
     return []
 
+
 def save_sync_history(history):
-    """保存同步记录列表到文件"""
+    """将同步记录列表保存到 HISTORY_FILE 中"""
     try:
         with open(HISTORY_FILE, "w", encoding="utf-8") as f:
             json.dump(history, f, indent=4, ensure_ascii=False)
     except Exception as e:
         print("保存同步记录失败:", e)
 
+
 def record_event(session_record, sample, instrument, rel_path, file_name, dest_file, action):
     """
-    根据文件相对路径的第一层（若为"."则归入 "root"）将事件记录到本次同步记录中
+    将复制事件记录到本次同步记录中。
+    根据文件相对路径的第一层（若为"."，则归为"root"）作为“批次”
     """
     group = "root" if rel_path == "." else rel_path.split(os.sep)[0]
     session_record.setdefault(sample, {}).setdefault(instrument, {}).setdefault(group, [])
@@ -46,11 +51,12 @@ def record_event(session_record, sample, instrument, rel_path, file_name, dest_f
         "action": action
     })
 
-###############################
+
+#############################################
 # 配置文件辅助函数
-###############################
+#############################################
 def load_config():
-    """加载配置文件（JSON格式），如果存在则返回配置字典，否则返回空字典。"""
+    """加载配置文件（JSON），存在则返回配置字典，否则返回空字典"""
     if os.path.exists(CONFIG_FILE):
         try:
             with open(CONFIG_FILE, "r", encoding="utf-8") as f:
@@ -59,17 +65,42 @@ def load_config():
             print("加载配置失败:", e)
     return {}
 
+
 def save_config(config):
-    """保存配置字典到配置文件。"""
+    """保存配置字典到配置文件"""
     try:
         with open(CONFIG_FILE, "w", encoding="utf-8") as f:
             json.dump(config, f, indent=4, ensure_ascii=False)
     except Exception as e:
         print("保存配置失败:", e)
 
-###############################
+
+#############################################
+# 忽略列表管理（新样品忽略）
+#############################################
+def load_ignore_list():
+    """加载忽略列表，返回列表，每项格式为 "instrument::sample" """
+    if os.path.exists(IGNORE_FILE):
+        try:
+            with open(IGNORE_FILE, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception as e:
+            print("加载忽略列表失败:", e)
+    return []
+
+
+def save_ignore_list(ignore_list):
+    """保存忽略列表到文件"""
+    try:
+        with open(IGNORE_FILE, "w", encoding="utf-8") as f:
+            json.dump(ignore_list, f, indent=4, ensure_ascii=False)
+    except Exception as e:
+        print("保存忽略列表失败:", e)
+
+
+#############################################
 # 文件操作辅助函数
-###############################
+#############################################
 def get_file_stat(file_path):
     """获取文件的状态（大小、修改时间等）"""
     try:
@@ -78,9 +109,10 @@ def get_file_stat(file_path):
         print(f"获取 {file_path} 状态时出错: {e}")
         return None
 
+
 def get_file_hash(file_path, chunk_size=8192):
     """
-    计算文件的 SHA256 哈希值，分块读取以降低内存占用
+    计算文件的 SHA256 哈希值，通过分块读取降低内存占用
     """
     hash_sha256 = hashlib.sha256()
     try:
@@ -95,12 +127,13 @@ def get_file_hash(file_path, chunk_size=8192):
         print(f"计算哈希出错: {file_path}, 错误: {e}")
         return None
 
+
 def files_identical(source_file, dest_file, executor, chunk_size=8192):
     """
-    判断两个文件是否相同：
-      1. 并行获取 os.stat 属性（大小、修改时间）。
-      2. 如果大小不同，则返回 False；若大小相同且取整后修改时间相同，则认为相同；
-      3. 否则并行计算 SHA256 哈希值后判断是否相同。
+    判断两个文件是否一致：
+      1. 并行获取两者的 os.stat（大小、修改时间）
+      2. 若大小不同返回 False，若大小相同且取整修改时间相同则认为一致；
+      3. 否则并行计算 SHA256 哈希后比较。
     """
     future_source_stat = executor.submit(get_file_stat, source_file)
     future_dest_stat = executor.submit(get_file_stat, dest_file)
@@ -120,17 +153,19 @@ def files_identical(source_file, dest_file, executor, chunk_size=8192):
         return False
     return hash_source == hash_dest
 
+
 def copy_file_task(source, dest):
-    """复制文件，保留元数据，并在控制台输出日志"""
+    """复制文件（保留元数据），并输出复制日志"""
     try:
         shutil.copy2(source, dest)
         print(f"Copied:\n  {source}\n  -> {dest}")
     except Exception as e:
         print(f"Error copying {source} -> {dest}: {e}")
 
+
 def prompt_user_dialog(parent, file_name, src_file, dest_file):
     """
-    当目标文件存在但内容不一致时，弹出对话框供用户选择【覆盖】、【跳过】或【重命名】
+    当目标文件存在且内容不一致时，弹出对话框供用户选择【覆盖】、【跳过】或【重命名】操作。
     """
     dialog = tk.Toplevel(parent)
     dialog.title("文件冲突")
@@ -138,9 +173,11 @@ def prompt_user_dialog(parent, file_name, src_file, dest_file):
     label = tk.Label(dialog, text=msg, justify=tk.LEFT)
     label.pack(padx=10, pady=10)
     result = tk.StringVar()
+
     def choose(option):
         result.set(option)
         dialog.destroy()
+
     btn_frame = tk.Frame(dialog)
     btn_frame.pack(pady=10)
     btn_overwrite = tk.Button(btn_frame, text="覆盖", command=lambda: choose("o"))
@@ -153,10 +190,12 @@ def prompt_user_dialog(parent, file_name, src_file, dest_file):
     parent.wait_window(dialog)
     return result.get()
 
+
 def sync_directories(source_dir, dest_dir, parent_window, executor, session_record, sample, instrument):
     """
-    遍历 source_dir 中的所有文件和子目录，
-    将文件复制到目标目录 dest_dir（保持原有目录结构），并记录复制事件到 session_record
+    遍历 source_dir 下所有文件及子目录，
+    将文件复制到目标目录 dest_dir（保持目录结构），
+    并记录实际进行的操作（新复制、覆盖、重命名复制）。
     """
     for root, dirs, files in os.walk(source_dir):
         rel_path = os.path.relpath(root, source_dir)
@@ -195,11 +234,13 @@ def sync_directories(source_dir, dest_dir, parent_window, executor, session_reco
                             new_dest_file = os.path.join(target_dir, new_name)
                         print(f"Scheduling rename copy:\n  {source_file} -> {new_dest_file}")
                         executor.submit(copy_file_task, source_file, new_dest_file)
-                        record_event(session_record, sample, instrument, rel_path, new_name, new_dest_file, "重命名复制")
+                        record_event(session_record, sample, instrument, rel_path, new_name, new_dest_file,
+                                     "重命名复制")
 
-############################################
+
+################################################
 # 主界面及应用程序类定义
-############################################
+################################################
 class SyncApp(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -209,16 +250,16 @@ class SyncApp(tk.Tk):
         self.repo_root = self.config_data.get("repo_root", "")
         self.usb_root = self.config_data.get("usb_root", "")
 
-        # 加载自定义图标，用于替换 Treeview 默认的展开/折叠指示器
+        # 加载自定义图标（替换 Treeview 默认展开／折叠指示器）
         try:
             img_closed = Image.open(r"E:\pythonProject\图标库\a-010-letter-closed.ico").convert("RGBA")
-            img_open   = Image.open(r"E:\pythonProject\图标库\a-010-letter.ico").convert("RGBA")
+            img_open = Image.open(r"E:\pythonProject\图标库\a-010-letter.ico").convert("RGBA")
             if hasattr(img_closed, "n_frames") and img_closed.n_frames > 1:
                 img_closed.seek(0)
             if hasattr(img_open, "n_frames") and img_open.n_frames > 1:
                 img_open.seek(0)
             img_closed = img_closed.resize(ICON_SIZE, Image.LANCZOS)
-            img_open   = img_open.resize(ICON_SIZE, Image.LANCZOS)
+            img_open = img_open.resize(ICON_SIZE, Image.LANCZOS)
             self.closedIndicator = ImageTk.PhotoImage(img_closed)
             self.openIndicator = ImageTk.PhotoImage(img_open)
         except Exception as e:
@@ -226,6 +267,7 @@ class SyncApp(tk.Tk):
             self.closedIndicator = None
             self.openIndicator = None
 
+        self.new_samples_window = None  # 保存新样品窗口引用
         self.create_widgets()
 
     def create_widgets(self):
@@ -275,6 +317,17 @@ class SyncApp(tk.Tk):
             self.status_label.config(text="U盘路径已更新")
 
     def start_sync(self):
+        """
+        同步流程：
+         1. 扫描数据库根目录下已有的样品（不新建样品）。
+         2. 根据每个样品文件夹下的子文件夹确定有效仪器集合（db_instruments_set）。
+         3. 遍历 USB 根目录，只有名称在 db_instruments_set 内的文件夹才被当作仪器文件夹处理。
+         4. 对于每个 USB 仪器文件夹，内部子目录为样品：
+             - 如果样品存在于数据库中，则同步数据到 “样品/仪器” 目录；
+             - 如果样品不存在，则记录为新样品供后续处理。
+         5. 清理忽略列表：如果忽略记录中对应的 USB 文件夹已不存在，则从忽略列表中删除记录。
+         6. 同步过程采用多线程处理，并记录实际复制操作到同步历史中。
+        """
         if not self.repo_root:
             messagebox.showwarning("警告", "请先选择数据库路径")
             return
@@ -283,20 +336,56 @@ class SyncApp(tk.Tk):
             return
 
         self.status_label.config(text="同步进行中...")
+
+        # 获取数据库中已有样品名称（不新建样品）
         db_samples = [name for name in os.listdir(self.repo_root)
                       if os.path.isdir(os.path.join(self.repo_root, name))]
         db_samples_set = set(db_samples)
-        if not db_samples_set:
-            messagebox.showwarning("警告", "数据库路径下未找到任何样品文件夹，无法同步数据。")
-            self.status_label.config(text="同步终止")
-            return
 
-        current_sync_record = {}
+        # 根据数据库中每个样品文件夹的子文件夹确定有效仪器名称集合
+        db_instruments_set = set()
+        for sample in db_samples:
+            sample_path = os.path.join(self.repo_root, sample)
+            try:
+                for item in os.listdir(sample_path):
+                    if os.path.isdir(os.path.join(sample_path, item)):
+                        db_instruments_set.add(item)
+            except Exception as e:
+                print(f"读取 {sample_path} 内子目录时出错: {e}")
 
-        with ThreadPoolExecutor(max_workers=8) as executor:
+        # 先清理忽略列表：保留当前 USB 上仍存在的 “instrument::sample” 记录
+        usb_ignore_keys = set()
+        if os.path.isdir(self.usb_root):
             for instrument in os.listdir(self.usb_root):
                 instrument_path = os.path.join(self.usb_root, instrument)
                 if not os.path.isdir(instrument_path):
+                    continue
+                if instrument not in db_instruments_set:
+                    continue
+                try:
+                    for sample in os.listdir(instrument_path):
+                        sample_path = os.path.join(instrument_path, sample)
+                        if os.path.isdir(sample_path):
+                            usb_ignore_keys.add(f"{instrument}::{sample}")
+                except Exception as e:
+                    print(f"读取 {instrument_path} 内部时出错: {e}")
+        ignore_list = load_ignore_list()
+        new_ignore_list = [key for key in ignore_list if key in usb_ignore_keys]
+        if set(ignore_list) != set(new_ignore_list):
+            save_ignore_list(new_ignore_list)
+            ignore_list = new_ignore_list
+
+        new_samples = []  # 用于保存新样品记录
+        current_sync_record = {}
+
+        with ThreadPoolExecutor(max_workers=8) as executor:
+            # 遍历 USB 根目录，筛选名称在 db_instruments_set 内的文件夹作为仪器文件夹
+            for instrument in os.listdir(self.usb_root):
+                instrument_path = os.path.join(self.usb_root, instrument)
+                if not os.path.isdir(instrument_path):
+                    continue
+                if instrument not in db_instruments_set:
+                    print(f"USB 文件夹 {instrument} 不在有效仪器列表中，忽略。")
                     continue
                 try:
                     samples_in_instrument = os.listdir(instrument_path)
@@ -308,16 +397,28 @@ class SyncApp(tk.Tk):
                     sample_usb_folder = os.path.join(instrument_path, sample)
                     if not os.path.isdir(sample_usb_folder):
                         continue
-                    if sample not in db_samples_set:
-                        print(f"跳过 USB 中不在数据库中的样品: {sample} 在 {instrument_path}")
-                        continue
-                    dest_sample_folder = os.path.join(self.repo_root, sample)
-                    dest_instrument_folder = os.path.join(dest_sample_folder, instrument)
-                    if not os.path.exists(dest_instrument_folder):
-                        print(f"目标仪器文件夹不存在，自动创建：{dest_instrument_folder}")
-                        os.makedirs(dest_instrument_folder, exist_ok=True)
-                    print(f"同步：USB [{sample_usb_folder}] -> 数据库 [{dest_instrument_folder}]")
-                    sync_directories(sample_usb_folder, dest_instrument_folder, self, executor, current_sync_record, sample, instrument)
+                    if sample in db_samples_set:
+                        # 样品存在于数据库中：同步数据
+                        dest_sample_folder = os.path.join(self.repo_root, sample)
+                        dest_instrument_folder = os.path.join(dest_sample_folder, instrument)
+                        if not os.path.exists(dest_instrument_folder):
+                            print(f"目标仪器文件夹不存在，自动创建：{dest_instrument_folder}")
+                            os.makedirs(dest_instrument_folder, exist_ok=True)
+                        print(f"同步：USB [{sample_usb_folder}] -> 数据库 [{dest_instrument_folder}]")
+                        sync_directories(sample_usb_folder, dest_instrument_folder, self, executor, current_sync_record,
+                                         sample, instrument)
+                    else:
+                        # 新样品：记录以供后续处理
+                        key = f"{instrument}::{sample}"
+                        if key in ignore_list:
+                            print(f"新样品 {sample} 来自 {instrument} 已在忽略列表中，跳过。")
+                        else:
+                            print(f"发现新样品：{sample} 来自 {instrument}")
+                            new_samples.append({
+                                "instrument": instrument,
+                                "sample": sample,
+                                "usb_path": sample_usb_folder
+                            })
 
         self.status_label.config(text="同步完成")
         if current_sync_record:
@@ -327,6 +428,114 @@ class SyncApp(tk.Tk):
             history.append(session_entry)
             save_sync_history(history)
             print("同步记录已更新。")
+        if new_samples:
+            self.show_new_samples_window(new_samples)
+
+    def show_new_samples_window(self, new_samples):
+        """
+        弹出新样品处理窗口，显示新发现的样品列表，并提供以下操作：
+          1. 删除 USB 中该新样品文件夹
+          2. 在数据库中新创建对应的新样品文件夹（连同仪器目录），并同步其内容
+          3. 忽略：记录该新样品（格式 "instrument::sample"）到忽略文件，下次自动跳过
+        """
+        if self.new_samples_window is not None and self.new_samples_window.winfo_exists():
+            self.new_samples_window.deiconify()
+            self.new_samples_window.lift()
+            return
+
+        top = tk.Toplevel(self)
+        top.title("新样品处理")
+        top.geometry("600x400")
+        self.new_samples_window = top
+
+        def on_close():
+            self.new_samples_window = None
+            top.destroy()
+
+        top.protocol("WM_DELETE_WINDOW", on_close)
+
+        frame = tk.Frame(top)
+        frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+
+        cols = ("仪器", "样品", "USB路径")
+        tree = ttk.Treeview(frame, columns=cols, show='headings')
+        for col in cols:
+            tree.heading(col, text=col)
+            tree.column(col, width=150, anchor="w")
+        tree.pack(fill=tk.BOTH, expand=True)
+
+        for item in new_samples:
+            tree.insert("", "end", values=(item["instrument"], item["sample"], item["usb_path"]))
+
+        btn_frame = tk.Frame(top)
+        btn_frame.pack(pady=10)
+
+        def delete_selected():
+            selected = tree.selection()
+            for item in selected:
+                values = tree.item(item, "values")
+                if not values:
+                    continue
+                instrument, sample, usb_path = values
+                try:
+                    shutil.rmtree(usb_path)
+                    messagebox.showinfo("删除", f"已删除 USB 中 {sample} 来自 {instrument} 的文件夹")
+                    tree.delete(item)
+                except Exception as e:
+                    messagebox.showerror("错误", f"删除失败：{e}")
+
+        def create_selected():
+            selected = tree.selection()
+            for item in selected:
+                values = tree.item(item, "values")
+                if not values:
+                    continue
+                instrument, sample, usb_path = values
+                dest_sample_folder = os.path.join(self.repo_root, sample)
+                if not os.path.exists(dest_sample_folder):
+                    try:
+                        os.makedirs(dest_sample_folder)
+                    except Exception as e:
+                        messagebox.showerror("错误", f"无法创建样品文件夹 {sample}：{e}")
+                        continue
+                dest_instrument_folder = os.path.join(dest_sample_folder, instrument)
+                if not os.path.exists(dest_instrument_folder):
+                    try:
+                        os.makedirs(dest_instrument_folder)
+                    except Exception as e:
+                        messagebox.showerror("错误", f"无法创建仪器文件夹 {instrument}：{e}")
+                        continue
+                with ThreadPoolExecutor(max_workers=4) as executor:
+                    sync_directories(usb_path, dest_instrument_folder, self, executor, {}, sample, instrument)
+                messagebox.showinfo("新样品", f"已在数据库中新建 {sample} 下的 {instrument} 文件夹，并同步数据")
+                tree.delete(item)
+
+        def ignore_selected():
+            selected = tree.selection()
+            ignore_list = load_ignore_list()
+            for item in selected:
+                values = tree.item(item, "values")
+                if not values:
+                    continue
+                instrument, sample, _ = values
+                key = f"{instrument}::{sample}"
+                if key not in ignore_list:
+                    ignore_list.append(key)
+            save_ignore_list(ignore_list)
+            messagebox.showinfo("忽略", "已忽略所选新样品，以后自动跳过")
+            for item in selected:
+                tree.delete(item)
+
+        btn_delete = tk.Button(btn_frame, text="删除 USB 文件夹", command=delete_selected)
+        btn_delete.pack(side=tk.LEFT, padx=5)
+        btn_create = tk.Button(btn_frame, text="在数据库中新建样品", command=create_selected)
+        btn_create.pack(side=tk.LEFT, padx=5)
+        btn_ignore = tk.Button(btn_frame, text="忽略", command=ignore_selected)
+        btn_ignore.pack(side=tk.LEFT, padx=5)
+
+        top.transient(self)
+        top.grab_set()
+        self.wait_window(top)
 
     def show_sync_history(self):
         history = load_sync_history()
@@ -336,7 +545,6 @@ class SyncApp(tk.Tk):
 
         sorted_history = sorted(history, key=lambda x: x.get("timestamp", ""), reverse=True)
 
-        # 自定义样式，去掉默认展开/折叠指示器
         style = ttk.Style(self)
         style.theme_use("clam")
         style.layout("Custom.Treeview.Item", [
@@ -377,12 +585,8 @@ class SyncApp(tk.Tk):
 
         tree.bind("<Double-1>", on_double_click)
 
-        # 单击事件：根据单击位置控制展开/折叠（仅对有子节点的项生效）
         def on_single_click(event):
-            region = tree.identify("region", event.x, event.y)
-            # 如果点击区域属于 "tree"（整个行），则获取该行对应的节点
             item_id = tree.identify_row(event.y)
-            # 若存在该节点且该节点有子节点，则切换展开／折叠状态
             if item_id and tree.get_children(item_id):
                 current_state = tree.item(item_id, "open")
                 tree.item(item_id, open=not current_state)
@@ -390,9 +594,9 @@ class SyncApp(tk.Tk):
                     tree.item(item_id, image=self.openIndicator)
                 else:
                     tree.item(item_id, image=self.closedIndicator)
+
         tree.bind("<Button-1>", on_single_click)
 
-        # 构建树形结构，所有节点默认展开，且显示展开图标
         for session in sorted_history:
             ts = session.get("timestamp", "未知时间")
             session_node = tree.insert("", "end", text=ts, image=self.openIndicator, open=True)
@@ -411,6 +615,7 @@ class SyncApp(tk.Tk):
         vsb = ttk.Scrollbar(hist_window, orient="vertical", command=tree.yview)
         vsb.pack(side='right', fill='y')
         tree.configure(yscrollcommand=vsb.set)
+
 
 if __name__ == "__main__":
     app = SyncApp()

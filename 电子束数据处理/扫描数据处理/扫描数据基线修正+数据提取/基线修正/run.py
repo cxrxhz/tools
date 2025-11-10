@@ -1,28 +1,28 @@
 #!/usr/bin/env python3
 import os
 import numpy as np
-import matplotlib.pyplot as plt
-from scipy.signal import savgol_filter, find_peaks
 import tkinter as tk
 from tkinter import filedialog
 import matplotlib as mpl
 
+mpl.rcParams['font.sans-serif'] = ['SimHei']  # 使用 SimHei 显示中文
+mpl.rcParams['axes.unicode_minus'] = False    # 正常显示负号
+
+
 # ---------------------- 可配置参数 ----------------------
 SMOOTHING_WINDOW = 21  # Savitzky–Golay 滤波窗口长度（必须为奇数）
 POLYORDER = 3  # 多项式阶数
-VALLEY_PROMINENCE = 0.5  # 波谷显著性阈值
+VALLEY_PROMINENCE = 0.2  # 波谷显著性阈值
 VALLEY_DISTANCE = None  # 波谷最小间隔采样点数
 MIN_PEAK_LENGTH = 50  # 输出波峰的最小数据点数阈值
+
+
 # ----------------------------------------------------------
-
-mpl.rcParams['font.sans-serif'] = ['SimHei']
-mpl.rcParams['axes.unicode_minus'] = False
-
 
 def load_data(filename):
     """
-    逐行读取数据文件，跳过无法转换为数值的行（例如包含说明文字的行）。
-    每行取前4个数字，其中：
+    逐行读取数据文件，跳过无法转换为数值的行（例如含说明文字的行）。
+    每行取前 4 个数字，其中：
       - 第一列为 x，
       - 第二列为 y1，
       - 第四列为 y2。
@@ -46,7 +46,6 @@ def load_data(filename):
                 valid_lines.append(numbers)
             except ValueError:
                 continue
-
     if len(valid_lines) == 0:
         raise ValueError(f"{filename} 中没有有效数据行。")
     data = np.array(valid_lines)
@@ -60,14 +59,13 @@ def segment_by_valleys(x, y, smoothing_window=SMOOTHING_WINDOW, polyorder=POLYOR
                        valley_prominence=VALLEY_PROMINENCE, valley_distance=VALLEY_DISTANCE):
     """
     对信号采用 Savitzky–Golay 平滑后，通过查找波谷将信号分段。
-    利用平滑后的信号找到候选波谷，再根据左右波峰判断有效性，
-    返回分段列表，每段为字典，包含 "indices"、"x" 与 "y" 数据。
+    返回的 segments 是个列表，每个元素为字典，包含 "indices"、"x" 与 "y" 数据。
     """
+    from scipy.signal import savgol_filter, find_peaks
     y_smooth = savgol_filter(y, window_length=smoothing_window, polyorder=polyorder)
     candidate_valleys = find_peaks(-y_smooth, distance=valley_distance)[0]
     candidate_peaks = find_peaks(y_smooth)[0]
     candidate_peaks.sort()
-
     valid_valleys = []
     for v in candidate_valleys:
         pos = np.searchsorted(candidate_peaks, v)
@@ -86,7 +84,6 @@ def segment_by_valleys(x, y, smoothing_window=SMOOTHING_WINDOW, polyorder=POLYOR
         if (ref_value - y_smooth[v]) / ref_value >= valley_prominence:
             valid_valleys.append(v)
     valid_valleys = np.array(valid_valleys)
-    # 若没有检测到有效波谷，则整个信号视为一段
     if len(valid_valleys) == 0:
         valley_indices = np.arange(len(y))
     else:
@@ -95,7 +92,6 @@ def segment_by_valleys(x, y, smoothing_window=SMOOTHING_WINDOW, polyorder=POLYOR
         if valid_valleys[-1] != len(y) - 1:
             valid_valleys = np.r_[valid_valleys, len(y) - 1]
         valley_indices = valid_valleys
-
     segments = []
     for i in range(len(valley_indices) - 1):
         idx = np.arange(valley_indices[i], valley_indices[i + 1] + 1)
@@ -109,20 +105,37 @@ def segment_by_valleys(x, y, smoothing_window=SMOOTHING_WINDOW, polyorder=POLYOR
 
 def linear_correct_segment(x_seg, y_seg):
     """
-    对单个波（从一个波谷到下一个波谷）的数据，采用两端点构造线性基线，
-    然后扣除该基线进行修正，使得左右端点均归零，消除线性外界干扰。
+    对单个波段数据（从一个波谷到下一个波谷）进行两步基线扣除：
+
+    第一步：粗略归零 —— 直接以该段的最小值作为基线扣除，
+           使得该段信号的最低点归零。
+
+    第二步：线性修正 —— 利用粗略归零后信号的首尾两点构造直线基线，
+           再从粗略归零后的信号中扣除该直线，保证该段两端均归零。
+
+    参数：
+       x_seg: 该波段内对应的 x 值（numpy 数组）。
+       y_seg: 该波段内的原始 y 值（numpy 数组）。
+
+    返回：
+       扣除了基线后的信号（numpy 数组）。
     """
+    # 第一步：粗略归零，扣除该波段最小值
+    rough = y_seg - np.min(y_seg)
+
+    # 如果数据点不足，直接返回粗略归零结果
     if len(x_seg) < 2:
-        return y_seg  # 若数据太少则直接返回
-    baseline = y_seg[0] + (y_seg[-1] - y_seg[0]) * (x_seg - x_seg[0]) / (x_seg[-1] - x_seg[0])
-    return y_seg - baseline
+        return rough
+
+    # 第二步：线性修正——利用粗略归零后的首尾数据构造直线基线
+    baseline = rough[0] + (rough[-1] - rough[0]) * (x_seg - x_seg[0]) / (x_seg[-1] - x_seg[0])
+    corrected = rough - baseline
+    return corrected
 
 
 def linear_baseline_correction(x, y):
     """
-    先调用 segment_by_valleys 将信号分割成各波段，
-    对每个波段调用 linear_correct_segment 进行线性基线修正，
-    得到修正后的完整信号，并返回各段信息以便后续波峰提取。
+    对信号进行分段，每个段内采用线性基线修正，返回修正后的完整信号和各段信息。
     """
     segments = segment_by_valleys(x, y)
     y_corr = np.empty_like(y)
@@ -136,14 +149,10 @@ def linear_baseline_correction(x, y):
 
 def get_accepted_peaks(segments, x, y1_corr, min_length=MIN_PEAK_LENGTH):
     """
-    根据分段信息从 y1_corr 中提取波峰数据，
-    删除每个波段的首尾（假定为波谷），
-    仅输出长度大于等于 min_length 的峰。
-    返回一个列表，每个字典包含：
-         "peak_no": 波峰编号，
-         "x": 此波峰中点所在的 x 坐标，
-         "y": 此波峰中点所在的 y1_corr 坐标，
-         "indices": 该波峰的所有数据点索引。
+    根据分段信息提取波峰数据：
+      - 对每个分段先去掉首尾（假定为波谷），
+      - 若剩余数据点数不少于 min_length，则视为有效波峰，
+      - 返回的列表中每个元素为字典，包含波峰编号、该波峰中点的 x、y 值及该波峰数据点索引。
     """
     accepted_peaks = []
     peak_no = 0
@@ -151,7 +160,7 @@ def get_accepted_peaks(segments, x, y1_corr, min_length=MIN_PEAK_LENGTH):
         idx = seg["indices"]
         if len(idx) <= 2:
             continue
-        # 去除左右波谷
+        # 删除分段首尾（波谷）后的数据点
         peak_idx = idx[1:-1]
         if len(peak_idx) < min_length:
             continue
@@ -161,26 +170,25 @@ def get_accepted_peaks(segments, x, y1_corr, min_length=MIN_PEAK_LENGTH):
             "peak_no": peak_no,
             "x": x[mid_index],
             "y": y1_corr[mid_index],
-            "indices": peak_idx  # 保存该波峰的全部数据点索引
+            "indices": peak_idx
         })
     return accepted_peaks
 
 
-def save_graph(original_path, x, y1, y2, y1_corr, y2_corr, accepted_peaks=None):
+def save_graph(file_path, x, y1, y2, y1_corr, y2_corr, accepted_peaks):
     """
-    在原数据目录下建立 graph 文件夹，
-    保存一张图像（展示修正前和修正后 y1 与 y2 曲线），
-    在图像上标注每个输出峰的编号（基于 y1_corr 的中点位置），
-    同时保存修正后的数据到文本文件中，表头格式修改为：
-         第一行：列名称（Time, y1_corr, y2_corr）
-         第二行：单位（s, Ω, Ω）
-    图像文件命名为：<原文件名>_compare.png，
-    数据文件命名为：<原文件名>_corrected.txt。
+    绘制图像并保存：
+      - 上图显示 y1（原始与修正后），并在修正后曲线上标注输出峰编号；
+      - 下图显示 y2（原始与修正后）。
+    同时保存修正后的数据。
+    输出到与每个数据文件同级的 “graph” 文件夹，图像命名为 [原文件名]_compare.png，
+    修正数据命名为 [原文件名]_corrected.txt。
     """
-    file_dir = os.path.dirname(original_path)
+    import matplotlib.pyplot as plt
+    file_dir = os.path.dirname(file_path)
     output_folder = os.path.join(file_dir, "graph")
     os.makedirs(output_folder, exist_ok=True)
-    base_name = os.path.basename(original_path)
+    base_name = os.path.basename(file_path)
 
     plt.figure(figsize=(12, 10))
     ax1 = plt.subplot(2, 1, 1)
@@ -189,15 +197,10 @@ def save_graph(original_path, x, y1, y2, y1_corr, y2_corr, accepted_peaks=None):
     plt.xlabel("Time(s)")
     plt.ylabel("y1")
     plt.legend()
-
-    # 在第一子图上标注输出峰编号
-    if accepted_peaks is not None:
+    if accepted_peaks:
         for peak in accepted_peaks:
-            ann_x = peak["x"]
-            ann_y = peak["y"]
-            peak_no = peak["peak_no"]
-            ax1.text(ann_x, ann_y + 0.2, f"{peak_no}", color="red", fontsize=12, fontweight="bold")
-
+            ax1.text(peak["x"], peak["y"] + 0.2, f"{peak['peak_no']}",
+                     color="red", fontsize=12, fontweight="bold")
     ax2 = plt.subplot(2, 1, 2)
     plt.plot(x, y2, label="原始 y2", alpha=0.5)
     plt.plot(x, y2_corr, label="修正后 y2", linewidth=2)
@@ -211,35 +214,40 @@ def save_graph(original_path, x, y1, y2, y1_corr, y2_corr, accepted_peaks=None):
     plt.savefig(image_path)
     plt.close()
 
-    # 输出修正后的数据，表头增加第二行表示单位
+    # 保存修正后的数据，列为 Time, y1_corr, y2_corr，单位分别为 s, Ω, Ω
     data_path = os.path.join(output_folder, base_name + "_corrected.txt")
     processed_data = np.column_stack((x, y1_corr, y2_corr))
     header = "Time\ty1_corr\ty2_corr\ns\tΩ\tΩ"
     np.savetxt(data_path, processed_data, delimiter="\t", header=header, comments="")
-    print(f"已保存图像至: {image_path}")
-    print(f"已保存修正数据至: {data_path}")
+    print("已保存图像至:", image_path)
+    print("已保存修正数据至:", data_path)
 
 
-def extract_peaks(original_path, x, y1_corr, y2_corr, accepted_peaks):
+def extract_peaks(file_path, x, y1_corr, y2_corr, accepted_peaks):
     """
-    在原数据目录下建立 result 文件夹，
-    针对每个输出的波峰（accepted_peaks），将该波峰的全部数据（去除首尾波谷）保存到单独文件中，
-    文件命名格式为：<原文件全名>-<波峰编号>.txt，
-    保存内容为：Time, y1_corr, y2_corr，其中表头第二行为单位。
+    保存每个有效波峰数据到单独的文本文件。
+    输出文件命名规则： [原文件名（含扩展名）]-[波峰编号].txt
+    文件内容包含列： Time, y1_corr, y2_corr（单位：s, Ω, Ω）
+    输出到与数据文件同级的 “result” 文件夹中。
     """
-    file_dir = os.path.dirname(original_path)
+    file_dir = os.path.dirname(file_path)
     result_folder = os.path.join(file_dir, "result")
     os.makedirs(result_folder, exist_ok=True)
-    base_name = os.path.basename(original_path)
+
+    # **保留原始文件名的扩展名**
+    base_name = os.path.basename(file_path)  # 直接获取完整文件名（含扩展名）
 
     for peak in accepted_peaks:
         peak_no = peak["peak_no"]
         indices = peak["indices"]
         peak_data = np.column_stack((x[indices], y1_corr[indices], y2_corr[indices]))
         header = "Time\ty1_corr\ty2_corr\ns\tΩ\tΩ"
+
+        # **修改输出文件命名格式：保留扩展名**
         peak_file = os.path.join(result_folder, f"{base_name}-{peak_no}.txt")
+
         np.savetxt(peak_file, peak_data, delimiter="\t", header=header, comments="")
-        print(f"已保存波峰数据至: {peak_file}")
+        print("已保存波峰数据至:", peak_file)
 
 
 def main():
@@ -250,7 +258,7 @@ def main():
         print("未选择文件夹，程序退出。")
         return
 
-    # 不再过滤后缀，尝试处理所有文件
+    # 获取该文件夹下所有文件（不区分后缀）
     files = [os.path.join(folder_path, fname) for fname in os.listdir(folder_path)
              if os.path.isfile(os.path.join(folder_path, fname))]
     if not files:
@@ -258,30 +266,31 @@ def main():
         return
 
     for file_path in files:
-        print(f"正在处理：{file_path}")
+        print("正在处理：", file_path)
         try:
             x, y1, y2 = load_data(file_path)
         except Exception as e:
-            print(f"读取文件 {file_path} 时出错，跳过该文件。错误信息：{e}")
+            print("读取文件", file_path, "时出错，跳过。错误信息:", e)
             continue
 
         try:
             y1_corr, segments_y1 = linear_baseline_correction(x, y1)
             y2_corr, segments_y2 = linear_baseline_correction(x, y2)
         except Exception as e:
-            print(f"处理文件 {file_path} 时出错（基线修正），跳过该文件。错误信息：{e}")
+            print("处理文件", file_path, "时出错（基线修正），跳过。错误信息:", e)
             continue
 
         try:
-            # 提取满足长度要求的输出峰（基于 y1 分段，通常 y1 与 y2 同步采样）
             accepted_peaks = get_accepted_peaks(segments_y1, x, y1_corr, min_length=MIN_PEAK_LENGTH)
-            # 保存比较图像和修正后的数据，在图像中标注每个输出峰的编号
             save_graph(file_path, x, y1, y2, y1_corr, y2_corr, accepted_peaks)
-            # 保存波峰数据到 result 文件夹
             extract_peaks(file_path, x, y1_corr, y2_corr, accepted_peaks)
         except Exception as e:
-            print(f"保存结果时出错（文件 {file_path}），跳过保存过程。错误信息：{e}")
+            print("保存结果时出错（文件", file_path, "），跳过。错误信息:", e)
             continue
+
+    # 在所有文件处理完成后，单独输出一行标记供总控程序读取
+    final_result_folder = os.path.join(folder_path, "result")
+    print("RESULT_FOLDER:" + final_result_folder, flush=True)
 
 
 if __name__ == "__main__":

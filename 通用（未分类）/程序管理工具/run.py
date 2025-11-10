@@ -14,13 +14,13 @@ class ProgramManager(tk.Tk):
         self.title("程序管理器")
         self.geometry("600x400")
         # 设置主窗口图标
-        self.iconbitmap(r"E:\pythonProject\图标库\a-018-smartphone.ico")
+        self.iconbitmap("a-018-smartphone.ico")
 
         # 加载并缩放自定义图标
         try:
-            img_closed = Image.open(r"E:\pythonProject\图标库\a-010-letter-closed.ico").convert("RGBA")
-            img_open = Image.open(r"E:\pythonProject\图标库\a-010-letter.ico").convert("RGBA")
-            img_program = Image.open(r"E:\pythonProject\图标库\a-033-website.ico").convert("RGBA")
+            img_closed = Image.open("a-010-letter-closed.ico").convert("RGBA")
+            img_open = Image.open("a-010-letter.ico").convert("RGBA")
+            img_program = Image.open("a-033-website.ico").convert("RGBA")
 
             img_closed = img_closed.resize(ICON_SIZE, Image.LANCZOS)
             img_open = img_open.resize(ICON_SIZE, Image.LANCZOS)
