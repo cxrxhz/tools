@@ -1,0 +1,60 @@
+import os
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.stats import linregress
+
+# Function to process each file
+def process_file(file_path):
+    data = np.loadtxt(file_path, skiprows=2)
+    I2 = data[:, 1]
+    R1 = data[:, 2]
+    R2 = data[:, 4]
+
+    return I2, R1, R2
+
+# Function to plot and fit data
+def plot_and_fit(x, y, xlabel, ylabel, title):
+    slope, intercept, r_value, p_value, std_err = linregress(x, y)
+    plt.figure()
+    plt.plot(x, y, 'o', label='Original data')
+    plt.plot(x, intercept + slope*x, 'r', label='Fitted line')
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.title(title)
+    plt.legend()
+    plt.show()
+
+    return slope
+
+# Directory containing the data files
+directory = r'F:\OneDrive - 草莓甜品屋\实验数据\PE-SiC\PEDOT PSS\undope nanofiber S1'
+
+# Initialize lists to store results
+temperatures = []
+dR1_values = []
+dR2_values = []
+
+# Process each file in the directory
+for file_name in os.listdir(directory):
+    if file_name.endswith('.txt'):
+        file_path = os.path.join(directory, file_name)
+        I2, R1, R2 = process_file(file_path)
+
+        # Perform linear fit and calculate dy for R1 and R2
+        slope_R1 = plot_and_fit(I2, R1, 'I2', 'R1', f'Linear Fit for {file_name} (R1)')
+        slope_R2 = plot_and_fit(I2, R2, 'I2', 'R2', f'Linear Fit for {file_name} (R2)')
+
+        # Calculate dy (slope * dx)
+        dx = np.mean(np.diff(I2))
+        dR1 = slope_R1 * dx
+        dR2 = slope_R2 * dx
+
+        # Extract temperature from file name and store results
+        temperature = int(file_name.split('K')[0])
+        temperatures.append(temperature)
+        dR1_values.append(dR1)
+        dR2_values.append(dR2)
+
+# Output temperature and dR1/dR2 values
+for temp, dR1, dR2 in zip(temperatures, dR1_values, dR2_values):
+    print(f'Temperature: {temp}K, dR1: {dR1}, dR2: {dR2}')
