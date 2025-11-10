@@ -1,0 +1,12 @@
+{
+  "formula": "y = km * ( (kf + 2*km + 2*x*(kf - km)) / (kf + 2*km - x*(kf - km)) )",
+  "params": {
+    "kf": "100",
+    "km": "0.208"
+  },
+  "xrange": [
+    0.0,
+    0.16
+  ],
+  "model_name": "MG模型"
+}

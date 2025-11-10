@@ -1,0 +1,15 @@
+{
+  "formula": "y = km*( 3 + x*( 2*( d*(kf - km) - 2*Rc*kf*km )/( d*(kf + km) + 2*Rc*kf*km )\n                 + ( L*(kf - km) - 2*Rc*kf*km )/( L*km + 2*Rc*kf*km ) ) )\n    / ( 3 - x*( 2*( d*(kf - km) - 2*Rc*kf*km )/( d*(kf + km) + 2*Rc*kf*km ) ) )",
+  "params": {
+    "L": "1e-6",
+    "Rc": "4e-8",
+    "d": "1e-6",
+    "kf": "100",
+    "km": "0.208"
+  },
+  "xrange": [
+    0.0,
+    0.16
+  ],
+  "model_name": "Nan模型"
+}
