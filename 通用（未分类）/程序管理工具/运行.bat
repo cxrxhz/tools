@@ -1,7 +1,7 @@
 @echo off
 cd /d "%~dp0"
 
-"C:\xhz\application\miniconda3\envs\data\python.exe" run.py %*
+"C:\users\xhz19\anaconda3\envs\data\python.exe" run.py %*
 if %errorlevel% == 0 (
     exit 0
 ) else (
