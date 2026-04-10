@@ -1,0 +1,69 @@
+{
+  "events": [
+    {
+      "askCost": 0,
+      "interval": 300,
+      "lastAskedTime": 1766737567.151,
+      "lastGrantedHistory": [
+        {
+          "at": 1766736722,
+          "reason": "set-start",
+          "ts": 0
+        }
+      ],
+      "lastGrantedTime": 1766711509,
+      "name": "排尿",
+      "rewardMultiplier": 1,
+      "ruleText": "",
+      "t50": 3600,
+      "urgeLabels": {
+        "1": "几乎不想",
+        "2": "似乎有点想",
+        "3": "如果顺便的话想做",
+        "4": "明确想要做了",
+        "5": "非常想要做",
+        "6": "不做有点难以忍受",
+        "7": "需要全力忍受",
+        "8": "完全忍不住了"
+      },
+      "wTime": 1,
+      "wUrge": 1
+    },
+    {
+      "askCost": 100,
+      "interval": 86400,
+      "lastAskedTime": 0,
+      "lastGrantedHistory": [],
+      "lastGrantedTime": 0,
+      "name": "高潮",
+      "rewardMultiplier": 10,
+      "ruleText": "许可后用一次骰子，如果点数为1-5那么准许毁灭高潮，点数为6才能完整高潮",
+      "t50": 604800,
+      "urgeLabels": {
+        "1": "几乎不想",
+        "2": "似乎有点想",
+        "3": "如果顺便的话想做",
+        "4": "明确想要做了",
+        "5": "非常想要做",
+        "6": "不做有点难以忍受",
+        "7": "需要全力忍受",
+        "8": "完全忍不住了"
+      },
+      "wTime": 10,
+      "wUrge": 1
+    }
+  ],
+  "rewardStock": 100,
+  "tasks": [
+    {
+      "id": "t_35554ded72de88",
+      "desc": "乳首自慰10min或寸止后停止",
+      "reward": 20,
+      "maxCount": 1,
+      "remaining": 0,
+      "cycleSeconds": 86400,
+      "startDate": "2025-12-26",
+      "lastRefillTs": 0
+    }
+  ]
+}

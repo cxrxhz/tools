@@ -38,10 +38,53 @@ class ModelPlotterApp:
         if not formula:
             return
         rhs = formula.split("=", 1)[-1].strip()
-    def remove_model(self, idx):
-        if 0 <= idx < len(self.models):
-            del self.models[idx]
+        try:
+            expr, x, y = self._parse_rhs(rhs)
+        except Exception as e:
+            messagebox.showerror("错误", f"公式解析失败：{e}")
+            return
+        # 验证依赖 x
+        if x not in expr.free_symbols:
+            messagebox.showwarning("警告", f"模型不依赖 x：{formula}")
+        # 先生成参数结构，获取命名
+        param_vars = self._build_param_inputs(formula, expr, reserved=RESERVED_VARS, model_name="未命名模型")
+        new_name = param_vars["__model_name_var__"].get().strip()
+        # 检查命名唯一性（包括所有现有模型的当前命名）
+        exist_names = set()
+        for m in self.models:
+            exist_name = m["params"].get("__model_name_var__")
+            if exist_name:
+                exist_names.add(exist_name.get().strip())
+        if new_name in exist_names:
+            messagebox.showwarning("警告", f"已存在同名模型：{new_name}，请更换名称后再添加。")
+            return
+        self.models.append({"formula": formula, "expr": expr, "params": param_vars})
+        if self.mode == "multi":
             self.render_multi_param_area()
+        self.update_plot()
+
+    def parse_formula(self):
+        formula = self.formula_entry.get().strip()
+        if not formula:
+            messagebox.showwarning("警告", "请输入公式")
+            return
+        rhs = formula.split("=", 1)[-1].strip()
+        try:
+            expr, x, y = self._parse_rhs(rhs)
+        except Exception as e:
+            messagebox.showerror("错误", f"公式解析失败：{e}")
+            return
+        # 验证依赖 x
+        if x not in expr.free_symbols:
+            messagebox.showwarning("警告", f"模型不依赖 x：{formula}")
+        # 清空当前模型和参数区
+        self.models.clear()
+        for w in self.params_frame.winfo_children():
+            w.destroy()
+        param_vars = self._build_param_inputs(formula, expr, reserved=RESERVED_VARS, model_name="未命名模型")
+        self.models.append({"formula": formula, "expr": expr, "params": param_vars})
+        self.update_plot()
+
     def __init__(self, master, mode="single"):
         # 设置matplotlib字体为支持中文
         try:
@@ -73,7 +116,7 @@ class ModelPlotterApp:
             tk.Label(left_frame, text="输入公式:").pack(anchor="w")
             self.formula_entry = tk.Entry(left_frame, width=32)
             self.formula_entry.pack(anchor="w")
-            tk.Button(left_frame, text="解析公式", command=self.parse_formula).pack(anchor="w", pady=(2,8))
+            tk.Button(left_frame, text="确定", command=self.parse_formula).pack(anchor="w", pady=(2,8))
         else:
             tk.Button(left_frame, text="添加新模型", command=self.add_model).pack(anchor="w")
             tk.Button(left_frame, text="加载已有模型", command=self.load_model).pack(anchor="w")
@@ -372,6 +415,11 @@ class ModelPlotterApp:
             return
         self.models.append({"formula": formula, "expr": expr, "params": param_vars})
         if self.mode == "multi":
+            self.render_multi_param_area()
+
+    def remove_model(self, idx):
+        if 0 <= idx < len(self.models):
+            del self.models[idx]
             self.render_multi_param_area()
 
     def load_model(self):

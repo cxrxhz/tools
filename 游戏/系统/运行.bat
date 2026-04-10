@@ -1,7 +1,8 @@
 @echo off
 cd /d "%~dp0"
-
-"C:\Users\xhz19\miniconda3\envs\data\python.exe" run.py %*
+echo 当前目录：%cd%
+echo 正在运行 Python 脚本...
+"C:\Users\xhz19\miniconda3\envs\data\python.exe" "%cd%\event_server.py" %*
 if %errorlevel% == 0 (
     exit 0
 ) else (
@@ -9,4 +10,3 @@ if %errorlevel% == 0 (
     pause
     exit /b %errorlevel%
 )
-

@@ -1,0 +1,2012 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>管控系统</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
+    .tab { display: none; }
+    .tab.active { display: block; }
+    nav button { margin-right: 10px; }
+    label { display: block; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div id="mainContainer" style="max-width:900px; margin:0 auto;">
+    <h1>管控系统</h1>
+
+    <!-- 顶部导航栏（也放进容器内） -->
+    <nav style="width:100%; display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
+      <div style="display:flex; gap:6px;">
+        <button onclick="showTab('calc')">许可页面</button>
+        <button onclick="showTab('edit')">编辑事件</button>
+        <button id="editTaskBtn" type="button">编辑任务</button>
+        <button id="editExtraTaskBtn" type="button">编辑附加任务</button>
+      </div>
+      <div style="display:flex; gap:10px; align-items:center;">
+        <button id="exportConfigBtn" type="button">导出配置</button>
+        <button id="importConfigBtn" type="button">导入配置</button>
+        <input id="importConfigFile" type="file" accept="application/json" style="display:none;">
+        <button id="modeSwitchBtn" type="button" style="background:#e6e6e6; color:#0078d4; border-radius:5px; padding:4px 12px;">本地模式</button>
+      </div>
+      <!-- 任务编辑弹窗 -->
+        <div id="taskModal" style="display:none; position:fixed; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.18); z-index:1000; align-items:center; justify-content:center;">
+          <div style="background:#fff; min-width:420px; max-width:90vw; padding:24px 28px 18px 28px; border-radius:8px; box-shadow:0 2px 16px #0002; position:relative;">
+            <h2 style="margin-top:0;">编辑任务</h2>
+            <div id="taskEditForm"></div>
+            <div style="margin-top:18px; display:flex; gap:12px;">
+              <button id="addTaskBtn" type="button">添加任务</button>
+              <button id="saveTaskBtn" type="button">保存</button>
+              <button id="closeTaskBtn" type="button" style="margin-left:auto;">关闭</button>
+            </div>
+          </div>
+        </div>
+        <div id="extraTaskModal" style="display:none; position:fixed; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.18); z-index:1000; align-items:center; justify-content:center;">
+          <div style="background:#fff; min-width:420px; max-width:90vw; padding:24px 28px 18px 28px; border-radius:8px; box-shadow:0 2px 16px #0002; position:relative;">
+            <h2 style="margin-top:0;">编辑附加任务</h2>
+            <div id="extraTaskEditForm"></div>
+            <div style="margin-top:18px; display:flex; gap:12px;">
+              <button id="addExtraTaskBtn" type="button">添加任务</button>
+              <button id="saveExtraTaskBtn" type="button">保存</button>
+              <button id="closeExtraTaskBtn" type="button" style="margin-left:auto;">关闭</button>
+            </div>
+          </div>
+        </div>
+    </nav>
+
+    <!-- 主区域：左右分栏 -->
+    <div id="calc" class="tab active" style="display: flex; align-items: flex-start; min-height:500px;">
+      <div style="width:520px; min-width:400px; padding-right:32px;">
+      <div style="margin-bottom:10px;">
+        <label>选择事件:
+          <select id="eventSelect"></select>
+        </label>
+        <label style="margin-left:20px;">迫切程度:
+          <select id="urgeSelect"></select>
+        </label>
+      </div>
+      <div id="ruleBox" style="display:none; margin:0 0 10px 0; padding:10px 12px; border:1px solid #e6e6e6; background:#fafbfc; max-width:700px; white-space:pre-wrap;"></div>
+      <div style="margin-bottom:10px;">
+        <span>使用附加值：</span>
+        <button id="useRewardBtn" style="display:none;">使用</button>
+        <input id="useRewardInput" type="number" value="0" style="width:60px;">
+        <span id="useRewardInfo" style="margin-left:8px;color:#888;"></span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <button id="requestBtn">请求许可</button>
+        <span id="askCostInfo" style="color:#d2691e;"></span>
+        <span id="cooldownTimer" style="display:none;color:#0078d4;"></span>
+      </div>
+      <div id="reaskRow" style="display:none; margin-top:8px;">
+        <button id="reaskBtn" type="button">再次询问</button>
+        <span id="reaskCostInfo" style="margin-left:10px; color:#d2691e;"></span>
+      </div>
+      <div id="result" style="margin-top:10px;"></div>
+          <div style="height:2em;"></div>
+          <button id="toggleSetStartBtn" style="margin-bottom:8px;">附加功能</button>
+          <div id="setStartPanel" style="display:none; border:1px solid #ccc; padding:12px; margin-bottom:10px; background:#fafbfc; max-width:340px;">
+            <div style="margin-bottom:8px;">
+              <label>开始时间:
+                <input id="setStartDate" type="date" style="width:130px;">
+                <input id="setStartTime" type="time" step="1" style="width:110px;">
+              </label>
+            </div>
+            <button id="setStartNowBtn" type="button" style="margin-right:10px;">设置为现在</button>
+            <button id="setStartApplyBtn" type="button">应用到当前事件</button>
+                <button id="setStartUndoBtn" type="button" style="margin-left:10px;">撤销应用</button>
+            <span id="setStartInfo" style="color:#888; margin-left:10px;"></span>
+          </div>
+
+        <button id="toggleTasksBtn" type="button" style="margin:8px 0;">任务列表</button>
+        <div id="tasksPanel" style="border:1px solid #ccc; padding:12px; margin-bottom:10px; background:#fafbfc; max-width:520px;">
+          <div id="tasksList"></div>
+          <div id="tasksInfo" style="color:#888; margin-top:8px;"></div>
+        </div>
+        <button id="toggleExtraTasksBtn" type="button" style="margin:8px 0;">附加任务列表</button>
+        <div id="extraTasksPanel" style="display:none; border:1px solid #ccc; padding:12px; margin-bottom:10px; background:#fafbfc; max-width:520px;">
+          <div id="extraTasksList"></div>
+          <div id="extraTasksInfo" style="color:#888; margin-top:8px;"></div>
+        </div>
+    </div>
+      <div style="width:200px; min-width:160px; border-left:1px solid #ccc; padding-left:32px; display:flex; flex-direction:column; gap:24px;">
+      <div>
+        <h3>附加系统</h3>
+        <div style="margin-bottom:10px;">奖励值存量：<span id="rewardStock">0</span></div>
+        <div style="margin-bottom:10px;">
+          <button id="addRewardBtn">获得</button>
+          <input id="addRewardInput" type="number" value="10" style="width:60px;">
+        </div>
+        <div style="height:18px;"></div>
+        <div style="margin-bottom:10px;">
+          <button id="forceGrantBtn">我没忍住</button>
+        </div>
+        <div style="border-top:1px solid #ccc; margin:18px 0 0 0; padding-top:10px;">
+          <h4 style="margin:0 0 8px 0;">小工具</h4>
+          <div style="margin-bottom:12px;">
+            <b>计时器：</b>
+            <input id="timerInput" type="number" min="1" value="60" style="width:60px;"> 秒
+            <button id="timerStartBtn">开始</button>
+            <span id="timerDisplay" style="margin-left:8px;color:#0078d4;"></span>
+          </div>
+          <div style="margin-bottom:12px;">
+            <b>骰子：</b>
+            <input id="diceMin" type="number" value="1" style="width:40px;"> -
+            <input id="diceMax" type="number" value="6" style="width:40px;">
+            <button id="diceBtn">掷骰</button>
+            <span id="diceResult" style="margin-left:8px;color:#0078d4;"></span>
+          </div>
+        </div>
+      </div>
+      <!-- 编辑事件弹窗 -->
+      <div id="eventModal" style="display:none; position:fixed; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.18); z-index:1000; align-items:center; justify-content:center;">
+        <div style="background:#fff; min-width:420px; max-width:90vw; padding:24px 28px 18px 28px; border-radius:8px; box-shadow:0 2px 16px #0002; position:relative;">
+          <h2 style="margin-top:0;">编辑事件配置</h2>
+          <label>选择事件:
+            <select id="editEventSelect"></select>
+          </label>
+          <button type="button" onclick="addEvent()">增加事件</button>
+          <button type="button" onclick="deleteEvent()">删除事件</button>
+          <div id="editForm"></div>
+          <div id="urgeMapForm"></div>
+          <div style="margin-top:18px; display:flex; gap:12px;">
+            <button type="button" onclick="saveEvents()">保存修改</button>
+            <button id="closeEventBtn" type="button" style="margin-left:auto;">关闭</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 编辑页（已嵌入右侧内容区，无需单独显示） -->
+
+  <script>
+            // 小工具：计时器与骰子
+            let timerInterval = null;
+            const timerInput = document.getElementById('timerInput');
+            const timerStartBtn = document.getElementById('timerStartBtn');
+            const timerDisplay = document.getElementById('timerDisplay');
+            if (timerStartBtn) {
+              timerStartBtn.addEventListener('click', function() {
+                if (timerInterval) clearInterval(timerInterval);
+                let sec = parseInt(timerInput.value) || 0;
+                if (sec <= 0) return;
+                timerDisplay.innerText = formatCountdown(sec);
+                timerInterval = setInterval(() => {
+                  sec--;
+                  if (sec <= 0) {
+                    timerDisplay.innerText = '时间到!';
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                  } else {
+                    timerDisplay.innerText = formatCountdown(sec);
+                  }
+                }, 1000);
+              });
+            }
+
+            const diceMin = document.getElementById('diceMin');
+            const diceMax = document.getElementById('diceMax');
+            const diceBtn = document.getElementById('diceBtn');
+            const diceResult = document.getElementById('diceResult');
+            if (diceBtn) {
+              diceBtn.addEventListener('click', function() {
+                const min = parseInt(diceMin.value) || 1;
+                const max = parseInt(diceMax.value) || 6;
+                if (min > max) {
+                  diceResult.innerText = '区间错误';
+                  return;
+                }
+                const val = Math.floor(Math.random() * (max - min + 1)) + min;
+                diceResult.innerText = val;
+              });
+            }
+        // 导出/导入配置
+        const exportConfigBtn = document.getElementById('exportConfigBtn');
+        const importConfigBtn = document.getElementById('importConfigBtn');
+        const importConfigFile = document.getElementById('importConfigFile');
+
+        exportConfigBtn.addEventListener('click', function() {
+          const data = {
+            events,
+            rewardStock,
+            tasks: loadTasks(),
+            extraTasks: loadExtraTasks(),
+          };
+          const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'event_app_config_' + new Date().toISOString().replace(/[:T]/g,'-').slice(0,19) + '.json';
+          document.body.appendChild(a);
+          a.click();
+          setTimeout(() => {
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+          }, 100);
+        });
+
+        importConfigBtn.addEventListener('click', function() {
+          importConfigFile.value = '';
+          importConfigFile.click();
+        });
+
+        importConfigFile.addEventListener('change', function(e) {
+          const file = e.target.files && e.target.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = function(evt) {
+            try {
+              const data = JSON.parse(evt.target.result);
+              // 以导入内容覆盖当前内存，然后统一应用/持久化（本地&可选服务器）
+              try { applyConfigSnapshot(data); } catch (e2) {
+                alert('导入失败：文件内容不合法');
+                return;
+              }
+              // 若当前为服务器模式，同时推送到服务器
+              Promise.resolve(saveConfig && saveConfig()).then(() => {
+                alert('配置已导入！');
+              }).catch(() => {
+                alert('配置已导入（但同步到服务器失败）');
+              });
+            } catch (e) {
+              alert('导入失败：文件格式错误');
+            }
+          };
+          reader.readAsText(file);
+        });
+    // ========================
+    // 任务系统（编辑页/许可页）
+    // ========================
+    const TASKS_KEY = 'tasks';
+
+    const toggleTasksBtn = document.getElementById('toggleTasksBtn');
+    const tasksPanel = document.getElementById('tasksPanel');
+    const tasksList = document.getElementById('tasksList');
+    const tasksInfo = document.getElementById('tasksInfo');
+
+    function parseCycleToSeconds(text) {
+      const s = (text || '').trim();
+      if (!s) return 0;
+      // 兼容任务周期写法，并扩展支持 `m` 作为分钟（如 2h10m）
+      const re = /(\d+)\s*(d|h|m|min|s)/gi;
+      let m;
+      let total = 0;
+      let consumed = '';
+      while ((m = re.exec(s)) !== null) {
+        const n = parseInt(m[1], 10) || 0;
+        const unit = String(m[2] || '').toLowerCase();
+        consumed += m[0].replace(/\s+/g, '');
+        if (unit === 'd') total += n * 86400;
+        else if (unit === 'h') total += n * 3600;
+        else if (unit === 'min' || unit === 'm') total += n * 60;
+        else if (unit === 's') total += n;
+      }
+      // 若完全无法匹配任何单位，视为无
+      if (total <= 0) return 0;
+      return total;
+    }
+
+    function formatCycle(seconds) {
+      seconds = Math.max(0, Math.floor(seconds || 0));
+      if (!seconds) return '';
+      const d = Math.floor(seconds / 86400); seconds -= d * 86400;
+      const h = Math.floor(seconds / 3600); seconds -= h * 3600;
+      const m = Math.floor(seconds / 60); seconds -= m * 60;
+      const parts = [];
+      if (d) parts.push(d + 'd');
+      if (h) parts.push(h + 'h');
+      if (m) parts.push(m + 'min');
+      if (seconds) parts.push(seconds + 's');
+      return parts.join('');
+    }
+
+    function todayISODate() {
+      return new Date().toISOString().slice(0, 10);
+    }
+
+    function loadTasks() {
+      try {
+        const raw = localStorage.getItem(TASKS_KEY);
+        const arr = raw ? JSON.parse(raw) : [];
+        if (!Array.isArray(arr)) return [];
+        return arr.map(t => ({
+          id: t.id || ('t_' + Math.random().toString(16).slice(2)),
+          desc: (t.desc || ''),
+          reward: Number(t.reward || 0),
+          maxCount: Number.isFinite(Number(t.maxCount)) ? Number(t.maxCount) : 0,
+          remaining: Number.isFinite(Number(t.remaining)) ? Number(t.remaining) : Number(t.maxCount || 0),
+          cycleSeconds: Number.isFinite(Number(t.cycleSeconds)) ? Number(t.cycleSeconds) : 0,
+          startDate: t.startDate || todayISODate(),
+          lastRefillTs: Number.isFinite(Number(t.lastRefillTs)) ? Number(t.lastRefillTs) : 0,
+        }));
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveTasks(tasks) {
+      // 先本地落盘（同步），保证 UI 立即刷新
+      const sanitized = (tasks || []).map(t => {
+        const o = Object.assign({}, t);
+        delete o._origMaxCount;
+        return o;
+      });
+      localStorage.setItem(TASKS_KEY, JSON.stringify(sanitized));
+
+      // 服务器模式：仅合并更新 tasks，避免把其它字段覆盖掉
+      (async () => {
+        try {
+          if (typeof getConfigMode !== 'function' || getConfigMode() !== 'server') return;
+          if (typeof loadConfigFromServer !== 'function' || typeof saveConfigToServer !== 'function') return;
+          const server = await loadConfigFromServer();
+          const merged = (server && typeof server === 'object') ? server : {};
+          merged.tasks = sanitized;
+          await saveConfigToServer(merged);
+        } catch (e) {
+          console.warn('同步 tasks 到服务器失败：', e);
+        }
+      })();
+    }
+
+    // ========================
+    // 附加任务系统（与主任务完全独立）
+    // ========================
+    const EXTRA_TASKS_KEY = 'extraTasks';
+
+    const toggleExtraTasksBtn = document.getElementById('toggleExtraTasksBtn');
+    const extraTasksPanel = document.getElementById('extraTasksPanel');
+    const extraTasksList = document.getElementById('extraTasksList');
+    const extraTasksInfo = document.getElementById('extraTasksInfo');
+
+    function loadExtraTasks() {
+      try {
+        const raw = localStorage.getItem(EXTRA_TASKS_KEY);
+        const arr = raw ? JSON.parse(raw) : [];
+        if (!Array.isArray(arr)) return [];
+        return arr.map(t => ({
+          id: t.id || ('et_' + Math.random().toString(16).slice(2)),
+          desc: (t.desc || ''),
+          reward: Number(t.reward || 0),
+          maxCount: Number.isFinite(Number(t.maxCount)) ? Number(t.maxCount) : 0,
+          remaining: Number.isFinite(Number(t.remaining)) ? Number(t.remaining) : Number(t.maxCount || 0),
+          cycleSeconds: Number.isFinite(Number(t.cycleSeconds)) ? Number(t.cycleSeconds) : 0,
+          startDate: t.startDate || todayISODate(),
+          lastRefillTs: Number.isFinite(Number(t.lastRefillTs)) ? Number(t.lastRefillTs) : 0,
+        }));
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveExtraTasks(extraTasks) {
+      // 先本地落盘（同步），保证 UI 立即刷新
+      const sanitized = (extraTasks || []).map(t => {
+        const o = Object.assign({}, t);
+        delete o._origMaxCount;
+        return o;
+      });
+      localStorage.setItem(EXTRA_TASKS_KEY, JSON.stringify(sanitized));
+
+      // 服务器模式：仅合并更新 extraTasks，避免把其它字段覆盖掉
+      (async () => {
+        try {
+          if (typeof getConfigMode !== 'function' || getConfigMode() !== 'server') return;
+          if (typeof loadConfigFromServer !== 'function' || typeof saveConfigToServer !== 'function') return;
+          const server = await loadConfigFromServer();
+          const merged = (server && typeof server === 'object') ? server : {};
+          merged.extraTasks = sanitized;
+          await saveConfigToServer(merged);
+        } catch (e) {
+          console.warn('同步 extraTasks 到服务器失败：', e);
+        }
+      })();
+    }
+
+    let extraTasks = loadExtraTasks();
+
+    function refreshExtraTasksNow() {
+      const now = Math.floor(Date.now() / 1000);
+      extraTasks.forEach(t => {
+        const cycle = Number(t.cycleSeconds || 0);
+        const maxCount = Number(t.maxCount || 0);
+        if (!cycle || cycle <= 0 || maxCount <= 0) {
+          return;
+        }
+        const startTs = dateStartTs(t.startDate) || now;
+        const baseline = t.lastRefillTs && t.lastRefillTs > 0 ? t.lastRefillTs : startTs;
+        if (now < startTs) return;
+        if (now - baseline >= cycle) {
+          t.remaining = maxCount;
+          const passed = Math.floor((now - baseline) / cycle);
+          t.lastRefillTs = baseline + passed * cycle;
+        }
+      });
+      saveExtraTasks(extraTasks);
+    }
+
+    function renderExtraTasksPanel() {
+      if (!extraTasksList || !extraTasksInfo) return;
+      extraTasks = loadExtraTasks();
+      refreshExtraTasksNow();
+      extraTasks = loadExtraTasks();
+
+      extraTasksList.innerHTML = '';
+
+      if (!extraTasks.length) {
+        extraTasksList.innerHTML = '<div style="color:#888;">暂无附加任务，请在“编辑附加任务”中添加。</div>';
+        extraTasksInfo.innerText = '';
+        return;
+      }
+
+      extraTasks.forEach((t, idx) => {
+        const row = document.createElement('div');
+        row.style.marginBottom = '14px';
+        row.style.borderBottom = '1px solid #eee';
+        row.style.paddingBottom = '6px';
+
+        const desc = document.createElement('div');
+        desc.style.fontWeight = 'bold';
+        desc.style.textAlign = 'left';
+        desc.innerText = t.desc || '(未命名任务)';
+        row.appendChild(desc);
+
+        const metaRow = document.createElement('div');
+        metaRow.style.display = 'flex';
+        metaRow.style.justifyContent = 'flex-end';
+        metaRow.style.alignItems = 'center';
+        metaRow.style.gap = '10px';
+        metaRow.style.marginTop = '2px';
+
+        const meta = document.createElement('div');
+        meta.style.whiteSpace = 'nowrap';
+        const cycleStr = t.cycleSeconds ? formatCycle(t.cycleSeconds) : '无';
+        meta.innerText = `+${Number(t.reward || 0)} 分 | ${Number(t.remaining || 0)}/${Number(t.maxCount || 0)} | 周期:${cycleStr}`;
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.innerText = '完成';
+        btn.disabled = Number(t.remaining || 0) <= 0;
+        btn.addEventListener('click', () => {
+          extraTasks = loadExtraTasks();
+          const cur = extraTasks[idx];
+          if (!cur) return;
+          refreshExtraTasksNow();
+          extraTasks = loadExtraTasks();
+          const cur2 = extraTasks[idx];
+          if (!cur2) return;
+          if (Number(cur2.remaining || 0) <= 0) {
+            renderExtraTasksPanel();
+            return;
+          }
+          cur2.remaining = Number(cur2.remaining || 0) - 1;
+          if (cur2.remaining < 0) cur2.remaining = 0;
+          saveExtraTasks(extraTasks);
+
+          // 发放奖励
+          const add = Number(cur2.reward || 0);
+          if (add) {
+            rewardStock += add;
+            localStorage.setItem('rewardStock', rewardStock);
+            updateRewardStockDisplay();
+
+            // 服务器模式：合并更新 rewardStock，避免覆盖其它字段
+            (async () => {
+              try {
+                if (typeof getConfigMode !== 'function' || getConfigMode() !== 'server') return;
+                if (typeof loadConfigFromServer !== 'function' || typeof saveConfigToServer !== 'function') return;
+                const server = await loadConfigFromServer();
+                const merged = (server && typeof server === 'object') ? server : {};
+                merged.rewardStock = Number(rewardStock || 0);
+                await saveConfigToServer(merged);
+              } catch (e) {
+                console.warn('同步 rewardStock 到服务器失败：', e);
+              }
+            })();
+          }
+          renderExtraTasksPanel();
+        });
+
+        metaRow.appendChild(meta);
+        metaRow.appendChild(btn);
+        row.appendChild(metaRow);
+        extraTasksList.appendChild(row);
+      });
+
+      extraTasksInfo.innerText = '提示：到达刷新周期后会自动补满可完成次数。';
+    }
+
+    if (toggleExtraTasksBtn && extraTasksPanel) {
+      toggleExtraTasksBtn.addEventListener('click', () => {
+        if (extraTasksPanel.style.display === 'none') {
+          extraTasksPanel.style.display = '';
+          renderExtraTasksPanel();
+        } else {
+          extraTasksPanel.style.display = 'none';
+        }
+      });
+    }
+
+    setInterval(() => {
+      // 编辑弹窗打开时，避免后台刷新覆盖用户正在编辑的内存数据
+      const extraTaskModalEl = document.getElementById('extraTaskModal');
+      if (extraTaskModalEl && extraTaskModalEl.style.display === 'flex') return;
+      extraTasks = loadExtraTasks();
+      refreshExtraTasksNow();
+      if (extraTasksPanel && extraTasksPanel.style.display !== 'none') {
+        renderExtraTasksPanel();
+      }
+    }, 60 * 1000);
+
+    function renderExtraTaskEditor() {
+      const container = document.getElementById('extraTaskEditForm');
+      if (!container) return;
+      container.innerHTML = '';
+
+      if (!extraTasks.length) {
+        const tip = document.createElement('div');
+        tip.style.color = '#888';
+        tip.style.marginBottom = '10px';
+        tip.innerText = '暂无任务，点击“添加任务”新增。';
+        container.appendChild(tip);
+      }
+
+      extraTasks.forEach((t, idx) => {
+        if (!Number.isFinite(Number(t._origMaxCount))) t._origMaxCount = Number(t.maxCount || 0);
+        const row = document.createElement('div');
+        row.style.display = 'flex';
+        row.style.flexWrap = 'wrap';
+        row.style.gap = '8px';
+        row.style.alignItems = 'center';
+        row.style.marginBottom = '10px';
+
+        row.innerHTML = `
+          <input data-k="desc" type="text" placeholder="任务描述" value="${String(t.desc).replace(/"/g, '&quot;')}" style="width:180px;">
+          <input data-k="reward" type="number" placeholder="奖励分值" title="奖励分值" value="${t.reward}" style="width:70px;">
+          <input data-k="maxCount" type="number" placeholder="可完成次数" title="可完成次数" value="${t.maxCount}" style="width:92px;">
+          <input data-k="cycle" type="text" placeholder="刷新周期(如2min4s)" value="${formatCycle(t.cycleSeconds)}" style="width:140px;">
+          <input data-k="startDate" type="date" value="${t.startDate || todayISODate()}" style="width:140px;">
+          <button data-act="del" type="button">删除</button>
+        `;
+
+        row.querySelector('[data-act="del"]').addEventListener('click', () => {
+          extraTasks.splice(idx, 1);
+          renderExtraTaskEditor();
+        });
+
+        // 双向绑定：即改即写入内存（同时监听 change，避免某些输入类型不触发 input）
+        row.querySelectorAll('input[data-k]').forEach(inp => {
+          const handler = () => {
+            const k = inp.getAttribute('data-k');
+            if (k === 'desc') t.desc = inp.value;
+            if (k === 'reward') t.reward = Number(inp.value || 0);
+            if (k === 'maxCount') t.maxCount = Number(inp.value || 0);
+            if (k === 'cycle') t.cycleSeconds = parseCycleToSeconds(inp.value);
+            if (k === 'startDate') t.startDate = inp.value;
+          };
+          inp.addEventListener('input', handler);
+          inp.addEventListener('change', handler);
+        });
+
+        container.appendChild(row);
+      });
+    }
+
+    const addExtraTaskBtn = document.getElementById('addExtraTaskBtn');
+    const saveExtraTaskBtn = document.getElementById('saveExtraTaskBtn');
+
+    function addNewExtraTask() {
+      extraTasks.push({
+        id: 'et_' + Math.random().toString(16).slice(2),
+        desc: '',
+        reward: 0,
+        maxCount: 0,
+        remaining: 0,
+        cycleSeconds: 0,
+        startDate: todayISODate(),
+        lastRefillTs: 0,
+      });
+      renderExtraTaskEditor();
+    }
+
+    if (addExtraTaskBtn) {
+      addExtraTaskBtn.addEventListener('click', addNewExtraTask);
+    }
+    if (saveExtraTaskBtn) {
+      saveExtraTaskBtn.addEventListener('click', () => {
+        extraTasks.forEach(t => {
+          const oldMax = Number.isFinite(Number(t._origMaxCount)) ? Number(t._origMaxCount) : Number(t.maxCount || 0);
+          const newMax = Number(t.maxCount || 0);
+          if (!Number.isFinite(Number(t.remaining))) t.remaining = Number(t.maxCount || 0);
+          // maxCount 发生变化：把 remaining 进行合理平移（新增任务：old=0 -> remaining= newMax）
+          if (newMax !== oldMax) {
+            const delta = newMax - oldMax;
+            const curRem = Number(t.remaining || 0);
+            if (delta > 0) t.remaining = Math.min(curRem + delta, newMax);
+            else t.remaining = Math.min(curRem, newMax);
+          }
+          if (t.remaining > t.maxCount) t.remaining = t.maxCount;
+          if (t.remaining < 0) t.remaining = 0;
+          if (!t.startDate) t.startDate = todayISODate();
+          delete t._origMaxCount;
+        });
+        saveExtraTasks(extraTasks);
+        const extraTaskModal = document.getElementById('extraTaskModal');
+        if (extraTaskModal) extraTaskModal.style.display = 'none';
+        showTab('calc');
+      });
+    }
+
+    const editExtraTaskBtn = document.getElementById('editExtraTaskBtn');
+    const extraTaskModal = document.getElementById('extraTaskModal');
+    const closeExtraTaskBtn = document.getElementById('closeExtraTaskBtn');
+    if (editExtraTaskBtn && extraTaskModal) {
+      editExtraTaskBtn.addEventListener('click', function() {
+        // 打开弹窗时刷新并渲染，保证编辑的是最新数据
+        extraTasks = loadExtraTasks();
+        renderExtraTaskEditor();
+        extraTaskModal.style.display = 'flex';
+      });
+    }
+    if (closeExtraTaskBtn && extraTaskModal) {
+      closeExtraTaskBtn.addEventListener('click', function() {
+        extraTaskModal.style.display = 'none';
+      });
+    }
+
+    let tasks = loadTasks();
+
+    function dateStartTs(dateStr) {
+      if (!dateStr) return 0;
+      const d = new Date(dateStr + 'T00:00:00');
+      if (isNaN(d.getTime())) return 0;
+      return Math.floor(d.getTime() / 1000);
+    }
+
+    function refreshTasksNow() {
+      const now = Math.floor(Date.now() / 1000);
+      tasks.forEach(t => {
+        const cycle = Number(t.cycleSeconds || 0);
+        const maxCount = Number(t.maxCount || 0);
+        if (!cycle || cycle <= 0 || maxCount <= 0) {
+          return;
+        }
+        const startTs = dateStartTs(t.startDate) || now;
+        const baseline = t.lastRefillTs && t.lastRefillTs > 0 ? t.lastRefillTs : startTs;
+        // 如果仍未到起始日，不补
+        if (now < startTs) return;
+        // 经过至少一个周期 -> 补满
+        if (now - baseline >= cycle) {
+          t.remaining = maxCount;
+          // 将 lastRefillTs 推进到最近一次周期边界，避免每次都补
+          const passed = Math.floor((now - baseline) / cycle);
+          t.lastRefillTs = baseline + passed * cycle;
+        }
+      });
+      saveTasks(tasks);
+    }
+
+    function renderTasksPanel() {
+      if (!tasksList || !tasksInfo) return;
+      tasks = loadTasks();
+      refreshTasksNow();
+      tasks = loadTasks();
+
+      tasksList.innerHTML = '';
+
+      if (!tasks.length) {
+        tasksList.innerHTML = '<div style="color:#888;">暂无任务，请在“编辑任务”中添加。</div>';
+        tasksInfo.innerText = '';
+        return;
+      }
+
+      tasks.forEach((t, idx) => {
+        const row = document.createElement('div');
+        row.style.marginBottom = '14px';
+        row.style.borderBottom = '1px solid #eee';
+        row.style.paddingBottom = '6px';
+
+        // 第一行：描述，靠左
+        const desc = document.createElement('div');
+        desc.style.fontWeight = 'bold';
+        desc.style.textAlign = 'left';
+        desc.innerText = t.desc || '(未命名任务)';
+        row.appendChild(desc);
+
+        // 第二行：其他内容+按钮，靠右
+        const metaRow = document.createElement('div');
+        metaRow.style.display = 'flex';
+        metaRow.style.justifyContent = 'flex-end';
+        metaRow.style.alignItems = 'center';
+        metaRow.style.gap = '10px';
+        metaRow.style.marginTop = '2px';
+
+        const meta = document.createElement('div');
+        meta.style.whiteSpace = 'nowrap';
+        const cycleStr = t.cycleSeconds ? formatCycle(t.cycleSeconds) : '无';
+        meta.innerText = `+${Number(t.reward || 0)} 分 | ${Number(t.remaining || 0)}/${Number(t.maxCount || 0)} | 周期:${cycleStr}`;
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.innerText = '完成';
+        btn.disabled = Number(t.remaining || 0) <= 0;
+        btn.addEventListener('click', () => {
+          tasks = loadTasks();
+          const cur = tasks[idx];
+          if (!cur) return;
+          refreshTasksNow();
+          tasks = loadTasks();
+          const cur2 = tasks[idx];
+          if (!cur2) return;
+          if (Number(cur2.remaining || 0) <= 0) {
+            renderTasksPanel();
+            return;
+          }
+          cur2.remaining = Number(cur2.remaining || 0) - 1;
+          if (cur2.remaining < 0) cur2.remaining = 0;
+          saveTasks(tasks);
+
+          // 发放奖励
+          const add = Number(cur2.reward || 0);
+          if (add) {
+            rewardStock += add;
+            localStorage.setItem('rewardStock', rewardStock);
+            updateRewardStockDisplay();
+
+            // 服务器模式：合并更新 rewardStock，避免覆盖其它字段
+            (async () => {
+              try {
+                if (typeof getConfigMode !== 'function' || getConfigMode() !== 'server') return;
+                if (typeof loadConfigFromServer !== 'function' || typeof saveConfigToServer !== 'function') return;
+                const server = await loadConfigFromServer();
+                const merged = (server && typeof server === 'object') ? server : {};
+                merged.rewardStock = Number(rewardStock || 0);
+                await saveConfigToServer(merged);
+              } catch (e) {
+                console.warn('同步 rewardStock 到服务器失败：', e);
+              }
+            })();
+          }
+          renderTasksPanel();
+        });
+
+        metaRow.appendChild(meta);
+        metaRow.appendChild(btn);
+        row.appendChild(metaRow);
+        tasksList.appendChild(row);
+      });
+
+      tasksInfo.innerText = '提示：到达刷新周期后会自动补满可完成次数。';
+    }
+
+    if (toggleTasksBtn && tasksPanel) {
+      toggleTasksBtn.addEventListener('click', () => {
+        if (tasksPanel.style.display === 'none') {
+          tasksPanel.style.display = '';
+          renderTasksPanel();
+        } else {
+          tasksPanel.style.display = 'none';
+        }
+      });
+    }
+
+    // 任务列表默认展开：页面加载后立即渲染一次
+    if (tasksPanel && tasksPanel.style.display !== 'none') {
+      renderTasksPanel();
+    }
+
+    // 每分钟刷新一次任务次数（不强制打开面板）
+    setInterval(() => {
+      tasks = loadTasks();
+      refreshTasksNow();
+      if (tasksPanel && tasksPanel.style.display !== 'none') {
+        renderTasksPanel();
+      }
+    }, 60 * 1000);
+
+    function renderTaskEditor() {
+      const container = document.getElementById('taskEditForm');
+      if (!container) return;
+      container.innerHTML = '';
+
+      if (!tasks.length) {
+        const tip = document.createElement('div');
+        tip.style.color = '#888';
+        tip.style.marginBottom = '10px';
+        tip.innerText = '暂无任务，点击“添加任务”新增。';
+        container.appendChild(tip);
+      }
+
+      tasks.forEach((t, idx) => {
+        if (!Number.isFinite(Number(t._origMaxCount))) t._origMaxCount = Number(t.maxCount || 0);
+        const row = document.createElement('div');
+        row.style.display = 'flex';
+        row.style.flexWrap = 'wrap';
+        row.style.gap = '8px';
+        row.style.alignItems = 'center';
+        row.style.marginBottom = '10px';
+
+        row.innerHTML = `
+          <input data-k="desc" type="text" placeholder="任务描述" value="${String(t.desc).replace(/"/g, '&quot;')}" style="width:180px;">
+          <input data-k="reward" type="number" placeholder="奖励分值" title="奖励分值" value="${t.reward}" style="width:70px;">
+          <input data-k="maxCount" type="number" placeholder="可完成次数" title="可完成次数" value="${t.maxCount}" style="width:92px;">
+          <input data-k="cycle" type="text" placeholder="刷新周期(如2min4s)" value="${formatCycle(t.cycleSeconds)}" style="width:140px;">
+          <input data-k="startDate" type="date" value="${t.startDate || todayISODate()}" style="width:140px;">
+          <button data-act="del" type="button">删除</button>
+        `;
+
+        row.querySelector('[data-act="del"]').addEventListener('click', () => {
+          tasks.splice(idx, 1);
+          renderTaskEditor();
+        });
+
+        // 双向绑定：即改即写入内存
+        row.querySelectorAll('input[data-k]').forEach(inp => {
+          inp.addEventListener('input', () => {
+            const k = inp.getAttribute('data-k');
+            if (k === 'desc') t.desc = inp.value;
+            if (k === 'reward') t.reward = Number(inp.value || 0);
+            if (k === 'maxCount') t.maxCount = Number(inp.value || 0);
+            if (k === 'cycle') t.cycleSeconds = parseCycleToSeconds(inp.value);
+            if (k === 'startDate') t.startDate = inp.value;
+          });
+        });
+
+        container.appendChild(row);
+      });
+    }
+
+    // 弹窗按钮逻辑（添加/保存/打开时渲染）
+    const addTaskBtn = document.getElementById('addTaskBtn');
+    const saveTaskBtn = document.getElementById('saveTaskBtn');
+
+    function addNewTask() {
+      tasks.push({
+        id: 't_' + Math.random().toString(16).slice(2),
+        desc: '',
+        reward: 0,
+        maxCount: 0,
+        remaining: 0,
+        cycleSeconds: 0,
+        startDate: todayISODate(),
+        lastRefillTs: 0,
+      });
+      renderTaskEditor();
+    }
+
+    if (addTaskBtn) {
+      addTaskBtn.addEventListener('click', addNewTask);
+    }
+    if (saveTaskBtn) {
+      saveTaskBtn.addEventListener('click', () => {
+        // 保存前确保 remaining 合法：未设置过就用 maxCount
+        tasks.forEach(t => {
+          const oldMax = Number.isFinite(Number(t._origMaxCount)) ? Number(t._origMaxCount) : Number(t.maxCount || 0);
+          const newMax = Number(t.maxCount || 0);
+          if (!Number.isFinite(Number(t.remaining))) t.remaining = Number(t.maxCount || 0);
+          // maxCount 发生变化：把 remaining 进行合理平移（新增任务：old=0 -> remaining= newMax）
+          if (newMax !== oldMax) {
+            const delta = newMax - oldMax;
+            const curRem = Number(t.remaining || 0);
+            if (delta > 0) t.remaining = Math.min(curRem + delta, newMax);
+            else t.remaining = Math.min(curRem, newMax);
+          }
+          if (t.remaining > t.maxCount) t.remaining = t.maxCount;
+          if (t.remaining < 0) t.remaining = 0;
+          if (!t.startDate) t.startDate = todayISODate();
+          delete t._origMaxCount;
+        });
+        saveTasks(tasks);
+        // 关闭弹窗并回到许可页面
+        const taskModal = document.getElementById('taskModal');
+        if (taskModal) taskModal.style.display = 'none';
+        showTab('calc');
+      });
+    }
+
+    // 打开弹窗时刷新
+    const editTaskBtn2 = document.getElementById('editTaskBtn');
+    if (editTaskBtn2) {
+      editTaskBtn2.addEventListener('click', () => {
+        tasks = loadTasks();
+        renderTaskEditor();
+      });
+    }
+            // 任务编辑弹窗入口
+            const editTaskBtn = document.getElementById('editTaskBtn');
+            const taskModal = document.getElementById('taskModal');
+            const closeTaskBtn = document.getElementById('closeTaskBtn');
+            editTaskBtn.addEventListener('click', function() {
+              taskModal.style.display = 'flex';
+            });
+            closeTaskBtn.addEventListener('click', function() {
+              taskModal.style.display = 'none';
+            });
+        // 附加功能：设置开始时间控件
+        const toggleSetStartBtn = document.createElement('button');
+        // 但我们已在HTML插入按钮和面板，无需动态创建
+        const setStartPanel = document.getElementById('setStartPanel');
+        const toggleSetStartBtnEl = document.getElementById('toggleSetStartBtn');
+        const setStartDate = document.getElementById('setStartDate');
+        const setStartTime = document.getElementById('setStartTime');
+        const setStartNowBtn = document.getElementById('setStartNowBtn');
+        const setStartApplyBtn = document.getElementById('setStartApplyBtn');
+        const setStartUndoBtn = document.getElementById('setStartUndoBtn');
+        const setStartInfo = document.getElementById('setStartInfo');
+
+        function ensureEventHistory(ev) {
+          if (!ev) return;
+          if (!Array.isArray(ev.lastGrantedHistory)) ev.lastGrantedHistory = [];
+          if (ev.lastGrantedHistory.length > 10) ev.lastGrantedHistory = ev.lastGrantedHistory.slice(-10);
+        }
+
+        function setEventLastGrantedTime(ev, newTs, reason) {
+          if (!ev) return false;
+          ensureEventHistory(ev);
+          const prev = (typeof ev.lastGrantedTime === 'number') ? ev.lastGrantedTime : 0;
+          // 避免重复入栈
+          if (prev !== newTs) {
+            ev.lastGrantedHistory.push({ ts: prev, at: Math.floor(Date.now()/1000), reason: reason || '' });
+            if (ev.lastGrantedHistory.length > 10) ev.lastGrantedHistory = ev.lastGrantedHistory.slice(-10);
+          }
+          ev.lastGrantedTime = newTs;
+          (async () => {
+            if (typeof loadConfig === 'function') await loadConfig();
+            localStorage.setItem('events', JSON.stringify(events));
+            if (typeof saveConfig === 'function') await saveConfig();
+          })();
+          try { startCooldown(ev, (typeof getAskCooldownInterval === 'function') ? getAskCooldownInterval(ev) : ev.interval); } catch(e) {}
+          return true;
+        }
+
+        function fillStartInputsFromTs(ts) {
+          if (!ts) ts = Math.floor(Date.now()/1000);
+          const dt = new Date(ts*1000);
+          setStartDate.value = dt.toISOString().slice(0,10);
+          setStartTime.value = dt.toTimeString().slice(0,8);
+        }
+
+        // 折叠/展开面板
+        toggleSetStartBtnEl.addEventListener('click', function() {
+          if (setStartPanel.style.display === 'none') {
+            // 默认填充为当前事件的 lastGrantedTime
+            const evName = select.value;
+            const ev = events.find(e => e.name === evName);
+            ensureEventHistory(ev);
+            let t = (ev && ev.lastGrantedTime) ? ev.lastGrantedTime : 0;
+            fillStartInputsFromTs(t);
+            setStartPanel.style.display = '';
+            setStartInfo.innerText = '';
+          } else {
+            setStartPanel.style.display = 'none';
+          }
+        });
+
+        // 设置为现在
+        setStartNowBtn.addEventListener('click', function() {
+          const now = Math.floor(Date.now()/1000);
+          fillStartInputsFromTs(now);
+          setStartInfo.innerText = '已填入当前时间';
+        });
+
+        // 应用到当前事件
+        setStartApplyBtn.addEventListener('click', function() {
+          const dateStr = setStartDate.value;
+          const timeStr = setStartTime.value;
+          if (!dateStr || !timeStr) {
+            setStartInfo.innerText = '请先选择日期和时间';
+            return;
+          }
+          // 合成时间戳
+          const dtStr = dateStr + 'T' + timeStr;
+          const dt = new Date(dtStr);
+          if (isNaN(dt.getTime())) {
+            setStartInfo.innerText = '时间格式无效';
+            return;
+          }
+          const ts = Math.floor(dt.getTime()/1000);
+          const evName = select.value;
+          const ev = events.find(e => e.name === evName);
+          if (ev) {
+            ensureEventHistory(ev);
+            setEventLastGrantedTime(ev, ts, 'set-start');
+            setStartInfo.innerText = '已应用到当前事件';
+          } else {
+            setStartInfo.innerText = '未找到当前事件';
+          }
+        });
+
+        // 撤销应用：回到前一次的时间
+        setStartUndoBtn.addEventListener('click', function() {
+          const evName = select.value;
+          const ev = events.find(e => e.name === evName);
+          if (!ev) {
+            setStartInfo.innerText = '未找到当前事件';
+            return;
+          }
+          ensureEventHistory(ev);
+          if (!ev.lastGrantedHistory.length) {
+            setStartInfo.innerText = '没有可撤销的记录';
+            return;
+          }
+          const last = ev.lastGrantedHistory.pop();
+          const ts = (last && typeof last.ts === 'number') ? last.ts : 0;
+          ev.lastGrantedTime = ts;
+          (async () => {
+            if (typeof loadConfig === 'function') await loadConfig();
+            localStorage.setItem('events', JSON.stringify(events));
+            if (typeof saveConfig === 'function') await saveConfig();
+          })();
+          fillStartInputsFromTs(ts);
+          setStartInfo.innerText = '已撤销到上一次时间';
+          try { startCooldown(ev, (typeof getAskCooldownInterval === 'function') ? getAskCooldownInterval(ev) : ev.interval); } catch(e) {}
+        });
+    // 默认事件配置
+    const defaultEvents = [
+      {
+        name: "事件A", t50: 10, wTime: 1, wUrge: 1, interval: 30, lastGrantedTime: 0, lastAskedTime: 0, rewardMultiplier: 1, askCost: 0, ruleText: '',
+        urgeLabels: {"1": "几乎不想", "2": "似乎有点想", "3": "如果顺便的话想做", "4": "明确想要做了", "5": "非常想要做", "6": "不做有点难以忍受", "7": "需要全力忍受", "8": "完全忍不住了"}
+      },
+      {
+        name: "事件B", t50: 100, wTime: 2, wUrge: 1, interval: 60, lastGrantedTime: 0, lastAskedTime: 0, rewardMultiplier: 1, askCost: 0, ruleText: '',
+        urgeLabels: {"1": "几乎不想", "2": "似乎有点想", "3": "如果顺便的话想做", "4": "明确想要做了", "5": "非常想要做", "6": "不做有点难以忍受", "7": "需要全力忍受", "8": "完全忍不住了"}
+      }
+    ];
+
+    // 从 LocalStorage 加载配置
+    let events = JSON.parse(localStorage.getItem("events")) || defaultEvents;
+    // 兼容旧数据，确保每个事件有 askCost / ruleText 字段
+    events.forEach(ev => {
+      if (typeof ev.askCost !== 'number') ev.askCost = 0;
+      if (typeof ev.ruleText !== 'string') ev.ruleText = '';
+    });
+    // 奖励值存量
+    let rewardStock = parseFloat(localStorage.getItem("rewardStock") || "0");
+
+    // ========================
+    // 弹窗：编辑事件
+    // ========================
+    const eventModal = document.getElementById('eventModal');
+    const closeEventBtn = document.getElementById('closeEventBtn');
+
+    function openEventModal() {
+      if (!eventModal) return;
+      eventModal.style.display = 'flex';
+      try {
+        refreshEditSelect && refreshEditSelect();
+        renderEditForm && renderEditForm();
+      } catch (e) {}
+    }
+
+    function closeEventModal() {
+      if (!eventModal) return;
+      eventModal.style.display = 'none';
+    }
+
+    if (closeEventBtn) {
+      closeEventBtn.addEventListener('click', closeEventModal);
+    }
+    if (eventModal) {
+      // 点击遮罩关闭（点击内容区不关闭）
+      eventModal.addEventListener('click', (e) => {
+        if (e.target === eventModal) closeEventModal();
+      });
+    }
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && eventModal && eventModal.style.display !== 'none') {
+        closeEventModal();
+      }
+    });
+
+    // 标签切换：保留 calc；edit 改为弹窗
+    function showTab(id) {
+      if (id === 'edit') {
+        openEventModal();
+        return;
+      }
+      document.querySelectorAll('.tab').forEach(div => div.classList.remove('active'));
+      const el = document.getElementById(id);
+      if (el) el.classList.add('active');
+    }
+
+    // ========================
+    // 配置存取：本地 / 服务器
+    // ========================
+    const MODE_KEY = 'configMode'; // 'local' | 'server'
+    const modeSwitchBtn = document.getElementById('modeSwitchBtn');
+    const SERVER_CONFIG_URL = '/config';
+
+    function getConfigMode() {
+      const m = String(localStorage.getItem(MODE_KEY) || 'server');
+      return (m === 'server') ? 'server' : 'local';
+    }
+
+    function setConfigMode(mode) {
+      const next = (mode === 'server') ? 'server' : 'local';
+      localStorage.setItem(MODE_KEY, next);
+      if (modeSwitchBtn) modeSwitchBtn.innerText = (next === 'server') ? '服务器模式' : '本地模式';
+      return next;
+    }
+
+    function getLocalConfigSnapshot() {
+      // 读取本地所有需要持久化的内容，保证和 localStorage 完全一致
+      let eventsData = [];
+      try {
+        eventsData = JSON.parse(localStorage.getItem('events')) || [];
+      } catch (e) { eventsData = []; }
+      let rewardStockData = 0;
+      try {
+        rewardStockData = parseFloat(localStorage.getItem('rewardStock') || '0');
+      } catch (e) { rewardStockData = 0; }
+      let tasksData = [];
+      try {
+        tasksData = JSON.parse(localStorage.getItem('tasks')) || [];
+      } catch (e) { tasksData = []; }
+      let extraTasksData = [];
+      try {
+        extraTasksData = JSON.parse(localStorage.getItem('extraTasks')) || [];
+      } catch (e) { extraTasksData = []; }
+      return {
+        events: eventsData,
+        rewardStock: rewardStockData,
+        tasks: tasksData,
+        extraTasks: extraTasksData
+      };
+    }
+
+    function applyConfigSnapshot(data) {
+      if (!data || typeof data !== 'object') throw new Error('配置为空');
+
+      if (data.events && Array.isArray(data.events)) {
+        const prevCalcSelected = (typeof select !== 'undefined' && select) ? select.value : '';
+        events = data.events;
+        events.forEach(ev => {
+          if (typeof ev.askCost !== 'number') ev.askCost = 0;
+          if (typeof ev.ruleText !== 'string') ev.ruleText = '';
+          if (!Array.isArray(ev.lastGrantedHistory)) ev.lastGrantedHistory = [];
+          if (typeof ev.lastAskedInterval !== 'number') ev.lastAskedInterval = 0;
+        });
+        // 持久化到本地，便于离线回退
+        localStorage.setItem('events', JSON.stringify(events));
+        const chosen = (prevCalcSelected && events.some(e => e.name === prevCalcSelected))
+          ? prevCalcSelected
+          : (events[0] && events[0].name);
+        if (typeof select !== 'undefined' && select && chosen) select.value = chosen;
+        if (typeof editSelect !== 'undefined' && editSelect && chosen) editSelect.value = chosen;
+      }
+
+      if (typeof data.rewardStock === 'number') {
+        rewardStock = data.rewardStock;
+        localStorage.setItem('rewardStock', String(rewardStock));
+        updateRewardStockDisplay && updateRewardStockDisplay();
+      }
+
+      if (data.tasks && Array.isArray(data.tasks)) {
+        localStorage.setItem('tasks', JSON.stringify(data.tasks));
+      }
+
+      if (data.extraTasks && Array.isArray(data.extraTasks)) {
+        localStorage.setItem('extraTasks', JSON.stringify(data.extraTasks));
+      }
+
+      refreshSelect && refreshSelect();
+      refreshEditSelect && refreshEditSelect();
+      refreshUrgeSelect && refreshUrgeSelect();
+      updateRuleBox && updateRuleBox();
+      renderEditForm && renderEditForm();
+      if (tasksPanel && tasksPanel.style.display !== 'none') {
+        renderTasksPanel && renderTasksPanel();
+      }
+      if (extraTasksPanel && extraTasksPanel.style.display !== 'none') {
+        renderExtraTasksPanel && renderExtraTasksPanel();
+      }
+    }
+
+    async function loadConfigFromServer() {
+      const res = await fetch(SERVER_CONFIG_URL, { method: 'GET', cache: 'no-store' });
+      if (!res.ok) throw new Error('服务器配置读取失败: ' + res.status);
+      return await res.json();
+    }
+
+    async function saveConfigToServer(snapshot) {
+      const res = await fetch(SERVER_CONFIG_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(snapshot),
+      });
+      if (!res.ok) throw new Error('服务器配置保存失败: ' + res.status);
+      return await res.json().catch(() => ({}));
+    }
+
+    async function loadConfig() {
+      const mode = getConfigMode();
+      if (mode === 'server') return await loadConfigFromServer();
+      return getLocalConfigSnapshot();
+    }
+
+    async function saveConfig() {
+      const mode = getConfigMode();
+      const snapshot = getLocalConfigSnapshot();
+      if (mode === 'server') {
+        await saveConfigToServer(snapshot);
+      }
+      // 本地无论如何都保留一份
+      localStorage.setItem('events', JSON.stringify(snapshot.events));
+      localStorage.setItem('rewardStock', String(snapshot.rewardStock));
+      localStorage.setItem('tasks', JSON.stringify(snapshot.tasks || []));
+      localStorage.setItem('extraTasks', JSON.stringify(snapshot.extraTasks || []));
+    }
+
+    async function switchModeAndApply(nextMode) {
+      const btn = modeSwitchBtn;
+      const oldText = btn ? btn.innerText : '';
+      const oldDisabled = btn ? btn.disabled : false;
+      if (btn) { btn.disabled = true; btn.innerText = '切换中...'; }
+
+      const prevMode = getConfigMode();
+      try {
+        // 为避免丢改动：从服务器 -> 本地 前先拉；从本地 -> 服务器 前先推
+        if (prevMode === 'local' && nextMode === 'server') {
+          // 先推本地到服务器，再切换并从服务器拉回（保证一致）
+          await saveConfigToServer(getLocalConfigSnapshot());
+          setConfigMode('server');
+          const data = await loadConfigFromServer();
+          applyConfigSnapshot(data);
+        } else if (prevMode === 'server' && nextMode === 'local') {
+          // 切回本地：直接应用本地快照
+          setConfigMode('local');
+          applyConfigSnapshot(getLocalConfigSnapshot());
+        } else {
+          setConfigMode(nextMode);
+          const data = await loadConfig();
+          applyConfigSnapshot(data);
+        }
+      } catch (e) {
+        // 失败回退到本地
+        setConfigMode('local');
+        try { applyConfigSnapshot(getLocalConfigSnapshot()); } catch (e2) {}
+        alert('切换失败，已回退到本地模式。\n原因：' + (e && e.message ? e.message : String(e)));
+      } finally {
+        if (btn) {
+          btn.disabled = oldDisabled;
+          // 以当前 mode 刷新文字
+          btn.innerText = (getConfigMode() === 'server') ? '服务器模式' : '本地模式';
+          if (!btn.innerText) btn.innerText = oldText;
+        }
+      }
+    }
+
+    // 初始化按钮文字，并在服务器模式下启动时自动拉取一次配置
+    setConfigMode(getConfigMode());
+    if (getConfigMode() === 'server') {
+      (async () => {
+        try {
+          const data = await loadConfigFromServer();
+          applyConfigSnapshot(data);
+        } catch (e) {
+          setConfigMode('local');
+          alert('服务器模式初始化失败，已回退到本地模式。\n原因：' + (e && e.message ? e.message : String(e)));
+        }
+      })();
+    }
+
+    if (modeSwitchBtn) {
+      modeSwitchBtn.addEventListener('click', async () => {
+        const cur = getConfigMode();
+        const next = (cur === 'local') ? 'server' : 'local';
+        await switchModeAndApply(next);
+      });
+    }
+
+    // 初始化事件下拉菜单
+    const select = document.getElementById("eventSelect");
+    function updateRuleBox() {
+      const box = document.getElementById('ruleBox');
+      if (!box) return;
+      const evName = select.value;
+      const ev = events.find(e => e.name === evName);
+      const text = (ev && typeof ev.ruleText === 'string') ? ev.ruleText.trim() : '';
+      if (text) {
+        box.style.display = '';
+        box.innerText = '规则：\n' + text;
+      } else {
+        box.style.display = 'none';
+        box.innerText = '';
+      }
+    }
+    function refreshSelect() {
+      const prev = String(select.value || '');
+      select.innerHTML = "";
+      events.forEach(ev => {
+        if (!Array.isArray(ev.lastGrantedHistory)) ev.lastGrantedHistory = [];
+        if (ev.lastGrantedHistory.length > 10) ev.lastGrantedHistory = ev.lastGrantedHistory.slice(-10);
+        if (typeof ev.lastAskedTime !== 'number') ev.lastAskedTime = 0;
+        if (typeof ev.lastAskedInterval !== 'number') ev.lastAskedInterval = 0;
+        if (typeof ev.askCost !== 'number') ev.askCost = 0;
+        if (typeof ev.ruleText !== 'string') ev.ruleText = '';
+        const opt = document.createElement("option");
+        opt.value = ev.name;
+        opt.textContent = ev.name;
+        select.appendChild(opt);
+      });
+
+      // 保留当前选择（避免在刷新 options 时被浏览器重置到第一个事件）
+      if (prev && events.some(e => e && e.name === prev)) {
+        select.value = prev;
+      } else if (events && events.length && events[0] && events[0].name) {
+        select.value = events[0].name;
+      }
+    }
+    refreshSelect();
+    updateRuleBox();
+
+    // 初始化迫切程度下拉菜单（根据当前事件）
+    const urgeSelect = document.getElementById("urgeSelect");
+    function refreshUrgeSelect() {
+      const prev = String(urgeSelect.value || '');
+      urgeSelect.innerHTML = "";
+      // 获取当前选中事件
+      const evName = select.value;
+      const ev = events.find(e => e.name === evName);
+      const urgeLabels = (ev && ev.urgeLabels) ? ev.urgeLabels : {"1": "几乎不想", "2": "似乎有点想", "3": "如果顺便的话想做", "4": "明确想要做了", "5": "非常想要做", "6": "不做有点难以忍受", "7": "需要全力忍受", "8": "完全忍不住了"};
+      for(let i=1;i<=8;i++) {
+        const opt = document.createElement("option");
+        opt.value = i;
+        opt.textContent = i + ' - ' + (urgeLabels[i]||'');
+        urgeSelect.appendChild(opt);
+      }
+      // 默认 4，但若用户已选择过且仍合法，则保留选择（避免 preSyncConfig 刷新时把选择重置为 4）
+      if (prev && String(prev) !== 'undefined') {
+        const n = Number(prev);
+        if (Number.isFinite(n) && n >= 1 && n <= 8) {
+          urgeSelect.value = String(n);
+          return;
+        }
+      }
+      urgeSelect.value = '4';
+    }
+    refreshUrgeSelect();
+    // 许可页事件切换：刷新迫切程度 + 规则展示 + 按钮状态（并与编辑页同步）
+    let __syncingEventSelect = false;
+    function syncEventSelection(from) {
+      if (__syncingEventSelect) return;
+      __syncingEventSelect = true;
+      try {
+        if (from === 'calc') {
+          const name = select.value;
+          if (editSelect && editSelect.value !== name && events.some(e => e.name === name)) {
+            editSelect.value = name;
+          }
+        } else if (from === 'edit') {
+          const name = editSelect ? editSelect.value : '';
+          if (name && select.value !== name && events.some(e => e.name === name)) {
+            select.value = name;
+          }
+        }
+        refreshUrgeSelect && refreshUrgeSelect();
+        updateRuleBox && updateRuleBox();
+        updateUseRewardInfo && updateUseRewardInfo();
+        updateRequestBtnState && updateRequestBtnState();
+        renderEditForm && renderEditForm();
+      } finally {
+        __syncingEventSelect = false;
+      }
+    }
+
+    select.addEventListener('change', () => {
+      if (__syncingEventSelect) return;
+      syncEventSelection('calc');
+    });
+
+    // 编辑页事件选择下拉框
+    const editSelect = document.getElementById('editEventSelect');
+    function refreshEditSelect() {
+      if (!editSelect) return;
+      const current = editSelect.value;
+      editSelect.innerHTML = '';
+      events.forEach(ev => {
+        const opt = document.createElement('option');
+        opt.value = ev.name;
+        opt.textContent = ev.name;
+        editSelect.appendChild(opt);
+      });
+      if (current && events.some(e => e.name === current)) {
+        editSelect.value = current;
+      } else if (events.length) {
+        editSelect.value = events[0].name;
+      }
+    }
+    if (editSelect) {
+      editSelect.addEventListener('change', () => {
+        if (__syncingEventSelect) return;
+        syncEventSelection('edit');
+      });
+    }
+
+    function addEvent() {
+      const baseName = '新事件';
+      let n = 1;
+      while (events.some(e => e.name === `${baseName}${n}`)) n++;
+      events.push({
+        name: `${baseName}${n}`,
+        t50: 10,
+        wTime: 1,
+        wUrge: 1,
+        interval: 30,
+        lastGrantedTime: 0,
+        lastAskedTime: 0,
+        rewardMultiplier: 1,
+        askCost: 0,
+        ruleText: '',
+        urgeLabels: {1:'极低',2:'较低',3:'低',4:'一般',5:'普通',6:'较高',7:'高',8:'极高'}
+      });
+      refreshSelect();
+      refreshEditSelect();
+      if (editSelect) editSelect.value = `${baseName}${n}`;
+      renderEditForm();
+    }
+
+    function deleteEvent() {
+      if (!events.length) return;
+      if (events.length === 1) {
+        alert('至少需要保留一个事件，无法删除。');
+        return;
+      }
+      const selectedName = editSelect ? editSelect.value : (events[0] && events[0].name);
+      const idx = events.findIndex(e => e.name === selectedName);
+      if (idx < 0) return;
+      const ok = confirm(`确定删除事件：“${events[idx].name}”？`);
+      if (!ok) return;
+
+      events.splice(idx, 1);
+
+      // 选择一个相邻事件作为新的选中项
+      const nextIdx = Math.min(idx, events.length - 1);
+      const nextName = events[nextIdx].name;
+
+      // 同步计算页选中事件
+      if (select && select.value === selectedName) {
+        select.value = nextName;
+      }
+
+      refreshSelect();
+      refreshEditSelect();
+      if (editSelect) editSelect.value = nextName;
+      refreshUrgeSelect();
+      renderEditForm();
+
+      localStorage.setItem('events', JSON.stringify(events));
+    }
+
+    // 让内联 onclick 能稳定调用（浏览器在模块/严格模式下可能不暴露到全局）
+    window.addEvent = addEvent;
+    window.deleteEvent = deleteEvent;
+
+    // 编辑页表单渲染
+    function renderEditForm() {
+      const container = document.getElementById("editForm");
+      container.innerHTML = "";
+      const selectedName = editSelect ? editSelect.value : (events[0] && events[0].name);
+      events.forEach((ev, idx) => {
+        if (selectedName && ev.name !== selectedName) return;
+        if (!ev.urgeLabels) {
+          ev.urgeLabels = {1:'极低',2:'较低',3:'低',4:'一般',5:'普通',6:'较高',7:'高',8:'极高'};
+        }
+        if (typeof ev.rewardMultiplier !== 'number') ev.rewardMultiplier = 1;
+        if (typeof ev.ruleText !== 'string') ev.ruleText = '';
+        const block = document.createElement("div");
+        let urgeLabelInputs = '<div>迫切等级文本自定义：</div>';
+        for(let i=1;i<=8;i++) {
+          urgeLabelInputs += `<div>等级${i}：<input value="${ev.urgeLabels[i]||''}" onchange="events[${idx}].urgeLabels[${i}]=this.value"></div>`;
+        }
+        // t50分解为d h min s
+        function splitSeconds(sec) {
+          sec = Math.round(sec);
+          const d = Math.floor(sec/86400); sec -= d*86400;
+          const h = Math.floor(sec/3600); sec -= h*3600;
+          const m = Math.floor(sec/60); sec -= m*60;
+          return {d,h,m,s:sec};
+        }
+        block.innerHTML = `
+          <h3>${ev.name}</h3>
+          名称: <input value="${ev.name}" onchange="events[${idx}].name=this.value"><br>
+          时间概率50%所需时间: 
+            <input id="t50str_${idx}" type="text" style="width:140px;" placeholder="如2h10m" value="${formatCycle(ev.t50)}">
+            <span style="color:#888;font-size:12px;">(如 2h10m / 1d2h3m4s)</span><br>
+          奖励值乘数: <input type="number" value="${ev.rewardMultiplier}" min="1" step="1" onchange="events[${idx}].rewardMultiplier=parseInt(this.value)"><br>
+          <span style="color:#0078d4;">提问消耗: <input type="number" value="${typeof ev.askCost==='number'?ev.askCost:0}" min="0" step="1" onchange="events[${idx}].askCost=parseInt(this.value)||0" style="width:70px;"> (每次请求许可需消耗奖励值，0为不消耗)</span><br>
+          <div style="margin-top:8px;">
+            <div style="margin-bottom:4px; color:#0078d4;">规则（可选）：</div>
+            <textarea rows="3" style="width:520px; max-width:90vw;" placeholder="可输入自定义规则/注意事项/约束条件…" onchange="events[${idx}].ruleText=this.value">${String(ev.ruleText || '').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</textarea>
+          </div>
+          时间权重: <input type="number" value="${ev.wTime}" onchange="events[${idx}].wTime=parseFloat(this.value)"><br>
+          迫切权重: <input type="number" value="${ev.wUrge}" onchange="events[${idx}].wUrge=parseFloat(this.value)"><br>
+          间隔: <input id="intervalstr_${idx}" type="text" style="width:140px;" placeholder="如10m" value="${formatCycle(ev.interval)}">
+          <span style="color:#888;font-size:12px;">(如 10m / 2h10m)</span><br>
+          <small>上次许可时间: <span>${ev.lastGrantedTime ? new Date(ev.lastGrantedTime*1000).toLocaleString() : '无'}</span></small><br>
+          ${urgeLabelInputs}
+        `;
+        // 监听t50和间隔输入框，解析为秒
+        setTimeout(()=>{
+          const t50el = document.getElementById(`t50str_${idx}`);
+          if (t50el) t50el.addEventListener('change', function() {
+            // 允许任意顺序和部分单位，如2h10m
+            events[idx].t50 = parseCycleToSeconds(t50el.value);
+            t50el.value = formatCycle(events[idx].t50); // 格式化回显
+          });
+          const intervalEl = document.getElementById(`intervalstr_${idx}`);
+          if (intervalEl) intervalEl.addEventListener('change', function() {
+            events[idx].interval = parseCycleToSeconds(intervalEl.value);
+            intervalEl.value = formatCycle(events[idx].interval);
+          });
+        }, 0);
+        container.appendChild(block);
+      });
+    }
+
+    // 移除全局迫切程度映射表单
+    document.getElementById("urgeMapForm").innerHTML = '';
+
+    // 保存事件配置到 LocalStorage
+    function saveEvents() {
+      // 记住当前许可页面和编辑页面的选中事件
+      const prevCalcSelected = select.value;
+      const prevEditSelected = editSelect ? editSelect.value : null;
+      localStorage.setItem("events", JSON.stringify(events));
+      refreshSelect();
+      refreshEditSelect();
+      // 恢复并同步两个选择框到同一事件（优先许可页选择，其次编辑页选择，否则第一个）
+      const chosen = (prevCalcSelected && events.some(e => e.name === prevCalcSelected))
+        ? prevCalcSelected
+        : ((prevEditSelected && events.some(e => e.name === prevEditSelected)) ? prevEditSelected : (events[0] && events[0].name));
+      if (chosen) {
+        select.value = chosen;
+        if (editSelect) editSelect.value = chosen;
+      }
+      // 主动刷新许可页面UI
+      updateRequestBtnState && updateRequestBtnState();
+      updateUseRewardInfo && updateUseRewardInfo();
+      refreshUrgeSelect && refreshUrgeSelect();
+      updateRuleBox && updateRuleBox();
+      renderEditForm && renderEditForm();
+      document.getElementById('result').innerText = '';
+      // 服务器模式下同步保存
+      Promise.resolve(saveConfig && saveConfig()).catch((e) => {
+        try { console.warn('saveConfig failed:', e); } catch (_) {}
+      });
+    }
+
+    // 单调插值（简化版线性）
+    function monotoneInterp(xs, ys) {
+      return function(x) {
+        let i = xs.length-2;
+        for (let j=0; j<xs.length-1; j++) {
+          if (x>=xs[j] && x<=xs[j+1]) { i=j; break; }
+        }
+        const t = (x-xs[i])/(xs[i+1]-xs[i]);
+        return (1-t)*ys[i] + t*ys[i+1];
+      };
+    }
+
+    // 时间概率函数：点集随 t50 缩放
+    function timeProbability(t, t50=10) {
+      const baseXs = [0,5,8,10,20];
+      const ys = [0,10,25,50,75];
+      const scale = t50/10;
+      const xs = baseXs.map(x => x*scale);
+
+      const interp = monotoneInterp(xs, ys);
+
+      if (t <= 2*t50) {
+        return interp(t);
+      } else {
+        const P2t50 = interp(2*t50);
+        const target = 90;
+        const k = -Math.log((100-target)/(100-P2t50)) / (2*t50);
+        return 100 - (100-P2t50) * Math.exp(-k*(t-2*t50));
+      }
+    }
+
+    // 迫切程度概率值映射（仍然全局，或可自定义）
+    const urgeValueMap = {1:5,2:10,3:20,4:30,5:50,6:70,7:90,8:100};
+
+    // 奖励值系统相关
+    function updateRewardStockDisplay() {
+      document.getElementById('rewardStock').innerText = rewardStock;
+    }
+    updateRewardStockDisplay();
+
+    // 获得奖励值
+    document.getElementById('addRewardBtn').onclick = async function() {
+      const v = parseFloat(document.getElementById('addRewardInput').value) || 0;
+      if (v !== 0) {
+        if (typeof loadConfig === 'function') {
+          const data = await loadConfig();
+          if (typeof applyConfigSnapshot === 'function') applyConfigSnapshot(data);
+        }
+        rewardStock += v;
+        localStorage.setItem('rewardStock', rewardStock);
+        updateRewardStockDisplay();
+        if (typeof saveConfig === 'function') await saveConfig();
+      }
+    };
+
+    // 计算当前事件奖励值乘数，更新使用说明
+    function updateUseRewardInfo() {
+      const evName = select.value;
+      const ev = events.find(e => e.name === evName);
+      const multiplier = (ev && ev.rewardMultiplier) ? ev.rewardMultiplier : 1;
+      const useVal = parseFloat(document.getElementById('useRewardInput').value) || 0;
+      document.getElementById('useRewardInfo').innerText = useVal > 0 ? `需消耗${useVal*multiplier}点奖励值` : '';
+    }
+    document.getElementById('useRewardInput').addEventListener('input', updateUseRewardInfo);
+    select.addEventListener('change', updateUseRewardInfo);
+
+    // 使用奖励值并直接请求许可
+    document.getElementById('useRewardBtn').onclick = async function() {
+      const useVal = parseFloat(document.getElementById('useRewardInput').value) || 0;
+      if (typeof loadConfig === 'function') {
+        const data = await loadConfig();
+        if (typeof applyConfigSnapshot === 'function') applyConfigSnapshot(data);
+      }
+      const evName = select.value;
+      const ev = events.find(e => e.name === evName);
+      const multiplier = (ev && ev.rewardMultiplier) ? ev.rewardMultiplier : 1;
+      const need = useVal * multiplier;
+      if (useVal > 0 && rewardStock >= need) {
+        rewardStock -= need;
+        localStorage.setItem('rewardStock', rewardStock);
+        updateRewardStockDisplay();
+        if (typeof saveConfig === 'function') await saveConfig();
+        ev._pendingExtra = useVal;
+        document.getElementById('requestBtn').click();
+      } else if (useVal > 0) {
+        alert('奖励值不足！');
+      }
+      updateUseRewardInfo();
+    };
+
+
+    // 请求许可按钮逻辑
+    const requestBtn = document.getElementById("requestBtn");
+    const forceGrantBtn = document.getElementById("forceGrantBtn");
+    const cooldownTimer = document.getElementById("cooldownTimer");
+    const reaskRow = document.getElementById('reaskRow');
+    const reaskBtn = document.getElementById('reaskBtn');
+    const reaskCostInfo = document.getElementById('reaskCostInfo');
+    let cooldownInterval = null;
+
+    function formatCountdown(sec) {
+      sec = Math.max(0, Math.round(sec));
+      const d = Math.floor(sec/86400); sec -= d*86400;
+      const h = Math.floor(sec/3600); sec -= h*3600;
+      const m = Math.floor(sec/60); sec -= m*60;
+      let str = '';
+      if (d) str += d+'d ';
+      if (h) str += h+'h ';
+      if (m) str += m+'min ';
+      if (sec || !str) str += sec+'s';
+      return str.trim();
+    }
+
+    function startCooldown(ev, interval) {
+      if (cooldownInterval) clearInterval(cooldownInterval);
+      function update() {
+        const now = Date.now()/1000;
+        const base = (typeof ev.lastAskedTime === 'number') ? ev.lastAskedTime : 0;
+        const left = Math.ceil(base + interval - now);
+        if (left > 0) {
+          cooldownTimer.style.display = '';
+          cooldownTimer.innerText = `下次可请求：${formatCountdown(left)}`;
+
+          // 冷却中：显示“再次询问”与费用提示
+          if (reaskRow) reaskRow.style.display = '';
+          if (reaskBtn) {
+            const evName = select.value;
+            const curEv = events.find(e => e.name === evName);
+            const askCost = (curEv && typeof curEv.askCost === 'number') ? curEv.askCost : 0;
+            const multiplier = (curEv && curEv.rewardMultiplier) ? curEv.rewardMultiplier : 1;
+            const extraPoints = computeReaskExtraPoints(left, interval);
+            const extraCost = extraPoints * multiplier;
+            const totalNeed = askCost + extraCost;
+            if (reaskCostInfo) {
+              reaskCostInfo.innerText = `冷却中再次询问需消耗：${totalNeed}`;
+            }
+            if (totalNeed > 0 && rewardStock < totalNeed) {
+              reaskBtn.disabled = true;
+              reaskBtn.title = '奖励值不足，无法再次询问';
+            } else {
+              reaskBtn.disabled = false;
+              reaskBtn.title = '';
+            }
+          }
+        } else {
+          cooldownTimer.style.display = 'none';
+          cooldownTimer.innerText = '';
+          if (reaskRow) reaskRow.style.display = 'none';
+          if (reaskCostInfo) reaskCostInfo.innerText = '';
+          clearInterval(cooldownInterval);
+        }
+      }
+      update();
+      cooldownInterval = setInterval(update, 1000);
+    }
+
+    function getAskCooldownInterval(ev) {
+      if (!ev) return 0;
+      const base = Number(ev.interval || 0);
+      const last = Number(ev.lastAskedInterval || 0);
+      // lastAskedInterval > 0 表示“上一次请求”后实际进入的冷却时长（用于仅本次冷却缩短）
+      const v = (last > 0) ? last : base;
+      return Math.max(0, v);
+    }
+
+    function computeNextAskCooldownInterval(baseIntervalSeconds, urgeKeyNum) {
+      const base = Math.max(0, Number(baseIntervalSeconds || 0));
+      if (!base) return 0;
+      // 迫切程度 6/7/8：请求后“下一次可请求”的间隔变为设置间隔的 1/2、1/4、1/6
+      // 仅对这一轮冷却生效：我们把它记录到 lastAskedInterval 上，用于下一次冷却判定/倒计时。
+      if (urgeKeyNum === 6) return Math.max(1, Math.floor(base / 2));
+      if (urgeKeyNum === 7) return Math.max(1, Math.floor(base / 4));
+      if (urgeKeyNum === 8) return Math.max(1, Math.floor(base / 6));
+      return base;
+    }
+
+    function computeReaskExtraPoints(remainingSeconds, intervalSeconds) {
+      const rem = Math.max(0, Number(remainingSeconds || 0));
+      const total = Math.max(0, Number(intervalSeconds || 0));
+      if (rem <= 0 || total <= 0) return 0;
+      // rem 越接近 total，越接近 10；线性相关；向上取整；最大 10
+      const ratio = Math.min(1, rem / total);
+      const pts = Math.ceil(10 * ratio);
+      return Math.max(1, Math.min(10, pts));
+    }
+
+    // 检查奖励值是否足够，决定按钮可用性和消耗提示
+    function updateRequestBtnState() {
+      const evName = select.value;
+      const ev = events.find(e => e.name === evName);
+      const askCost = (ev && typeof ev.askCost === 'number') ? ev.askCost : 0;
+      const askCostInfo = document.getElementById('askCostInfo');
+      if (askCost > 0) {
+        askCostInfo.style.display = '';
+        askCostInfo.innerText = `需消耗${askCost}奖励值`;
+        if (rewardStock < askCost) {
+          requestBtn.disabled = true;
+          requestBtn.title = '奖励值不足，无法请求许可';
+        } else {
+          requestBtn.disabled = false;
+          requestBtn.title = '';
+        }
+      } else {
+        askCostInfo.style.display = 'none';
+        askCostInfo.innerText = '';
+        requestBtn.disabled = false;
+        requestBtn.title = '';
+      }
+    }
+    select.addEventListener('change', updateRequestBtnState);
+    document.getElementById('addRewardBtn').addEventListener('click', function() { setTimeout(updateRequestBtnState, 0); });
+    document.getElementById('addRewardInput').addEventListener('input', function() { setTimeout(updateRequestBtnState, 0); });
+    // 每次奖励值变动后都应刷新
+    updateRequestBtnState();
+
+    async function preSyncConfig() {
+      if (typeof loadConfig === 'function') {
+        const data = await loadConfig();
+        if (typeof applyConfigSnapshot === 'function') applyConfigSnapshot(data);
+      }
+    }
+
+    async function handleRequestCore(options) {
+      const ignoreCooldown = !!(options && options.ignoreCooldown);
+
+      const evName = select.value;
+      const ev = events.find(e => e.name === evName);
+      const urgeKey = urgeSelect.value;
+      const pUrge = urgeValueMap[urgeKey] || 0;
+      const urgeKeyNum = Number(urgeKey);
+
+      // 检查事件 askCost
+      const askCost = (ev && typeof ev.askCost === 'number') ? ev.askCost : 0;
+      if (askCost > 0) {
+        if (rewardStock < askCost) {
+          alert('奖励值不足，无法请求许可！');
+          updateRequestBtnState();
+          return;
+        } else {
+          rewardStock -= askCost;
+          localStorage.setItem('rewardStock', rewardStock);
+          updateRewardStockDisplay();
+          if (typeof saveConfig === 'function') await saveConfig();
+          updateRequestBtnState();
+        }
+      }
+
+      // 检查奖励值输入框
+      let extra = 0;
+      const rewardInput = document.getElementById('useRewardInput');
+      const useVal = parseFloat(rewardInput.value) || 0;
+      const multiplier = (ev && ev.rewardMultiplier) ? ev.rewardMultiplier : 1;
+      const need = useVal * multiplier;
+      if (useVal > 0 && rewardStock >= need) {
+        rewardStock -= need;
+        localStorage.setItem('rewardStock', rewardStock);
+        updateRewardStockDisplay();
+        if (typeof saveConfig === 'function') await saveConfig();
+        extra = useVal;
+        rewardInput.value = '';
+        updateUseRewardInfo();
+        updateRequestBtnState();
+      } else if (useVal > 0) {
+        alert('奖励值不足！');
+        updateRequestBtnState();
+        return;
+      }
+      // 取本次要用的附加值（奖励值），用后清空
+      if (ev._pendingExtra) {
+        extra = ev._pendingExtra;
+        ev._pendingExtra = 0;
+        rewardInput.value = '';
+        updateUseRewardInfo();
+        updateRequestBtnState();
+      }
+
+      const now = Date.now()/1000;
+      if (typeof ev.lastGrantedTime !== 'number') ev.lastGrantedTime = 0;
+      if (typeof ev.lastAskedTime !== 'number') ev.lastAskedTime = 0;
+      const askPassed = now - ev.lastAskedTime;
+      const currentAskCooldownInterval = getAskCooldownInterval(ev);
+      if (!ignoreCooldown && askPassed < currentAskCooldownInterval) {
+        // 冷却中，直接显示倒计时
+        startCooldown(ev, currentAskCooldownInterval);
+        document.getElementById("result").innerText = '';
+        return;
+      }
+
+      // 记录本次提问时间（无论许可与否都进入提问冷却）
+      ev.lastAskedTime = now;
+      ev.lastAskedInterval = computeNextAskCooldownInterval(ev.interval, urgeKeyNum);
+      localStorage.setItem("events", JSON.stringify(events));
+      if (typeof saveConfig === 'function') await saveConfig();
+      startCooldown(ev, getAskCooldownInterval(ev));
+
+      // 用实际许可间隔 intervalPassed 作为 t 参与概率计算
+      const grantPassed = now - ev.lastGrantedTime;
+      const pTime = timeProbability(grantPassed, ev.t50);
+
+      // 迫切权重动态调整（1-4为8/6/4/2倍，5为1倍，6-8为2/4/6倍）
+      let wUrge = ev.wUrge;
+      if (urgeKeyNum === 1) wUrge = ev.wUrge * 8;
+      else if (urgeKeyNum === 2) wUrge = ev.wUrge * 6;
+      else if (urgeKeyNum === 3) wUrge = ev.wUrge * 4;
+      else if (urgeKeyNum === 4) wUrge = ev.wUrge * 2;
+      else if (urgeKeyNum === 5) wUrge = ev.wUrge;
+      else if (urgeKeyNum === 6) wUrge = ev.wUrge * 2;
+      else if (urgeKeyNum === 7) wUrge = ev.wUrge * 4;
+      else if (urgeKeyNum === 8) wUrge = ev.wUrge * 6;
+
+      // 先算原始概率
+      let pBase = (ev.wTime*pTime + wUrge*pUrge) / (ev.wTime+wUrge);
+      // 先乘0.5得到修正后概率（百分比）
+      let pFinal = pBase * 0.5;
+      // 新奖励值修正逻辑
+      function clamp01(x) { return Math.min(1, Math.max(0, x)); }
+      function logit(p) {
+        const eps = 1e-12;
+        p = Math.min(1 - eps, Math.max(eps, p));
+        return Math.log(p / (1 - p));
+      }
+      function invLogit(z) {
+        if (z >= 0) {
+          const ez = Math.exp(-z);
+          return 1 / (1 + ez);
+        } else {
+          const ez = Math.exp(z);
+          return ez / (1 + ez);
+        }
+      }
+      // 参数
+      const w = 0.047473;
+      const alpha = 1.104326;
+      // 如果有附加值，使用新公式
+      if (extra > 0) {
+        // 用修正后概率/100作为p0
+        const p0_for_formula = clamp01(pFinal / 100);
+        const R = extra;
+        const sensitivity = Math.pow(1 - p0_for_formula, alpha);
+        const z = logit(p0_for_formula) + w * sensitivity * R;
+        pFinal = invLogit(z) * 100;
+      } else {
+        // 没有奖励值时，pFinal就是百分比
+        // 保持原样
+      }
+      if (pFinal > 100) pFinal = 100;
+      // 如果奖励值为负，概率减半
+      let pFinalDisplay = pFinal;
+      if (rewardStock < 0) {
+        pFinal = pFinal / 2;
+      }
+      // 随机许可/禁止
+      const granted = Math.random()*100 < pFinal;
+      const urgeLabel = (ev.urgeLabels && ev.urgeLabels[urgeKey]) ? ev.urgeLabels[urgeKey] : '';
+      document.getElementById("result").innerText =
+        (granted ? '✅ 许可' : '⛔ 禁止') + `\n(概率: ${pFinalDisplay.toFixed(2)}%${rewardStock<0?'（奖励值为负，概率减半）':''}，迫切程度: ${urgeKey} - ${urgeLabel}${extra ? `，本次使用附加值: ${extra}` : ''})`;
+      if (granted) {
+        // 只有许可才更新“上次许可时间”（用于概率间隔）
+        ensureEventHistory(ev);
+        setEventLastGrantedTime(ev, now, 'granted');
+      }
+    }
+
+    requestBtn.addEventListener("click", async function() {
+      await preSyncConfig();
+      await handleRequestCore({ ignoreCooldown: false });
+    });
+
+    if (reaskBtn) {
+      reaskBtn.addEventListener('click', async function() {
+        await preSyncConfig();
+
+        const evName = select.value;
+        const ev = events.find(e => e.name === evName);
+        if (!ev) return;
+
+        const now = Date.now()/1000;
+        const interval = getAskCooldownInterval(ev);
+        const base = (typeof ev.lastAskedTime === 'number') ? ev.lastAskedTime : 0;
+        const left = Math.ceil(base + interval - now);
+        if (left <= 0) {
+          await handleRequestCore({ ignoreCooldown: false });
+          return;
+        }
+
+        const askCost = (typeof ev.askCost === 'number') ? ev.askCost : 0;
+        const multiplier = (ev && ev.rewardMultiplier) ? ev.rewardMultiplier : 1;
+        const extraPoints = computeReaskExtraPoints(left, interval);
+        const extraCost = extraPoints * multiplier;
+        const totalNeed = askCost + extraCost;
+
+        if (totalNeed > 0 && rewardStock < totalNeed) {
+          alert('奖励值不足，无法再次询问！');
+          updateRequestBtnState();
+          return;
+        }
+
+        // 先扣“再次询问”的额外费用（askCost 在核心逻辑里会再扣一次，这里只扣 extraCost 部分）
+        if (extraCost > 0) {
+          rewardStock -= extraCost;
+          localStorage.setItem('rewardStock', rewardStock);
+          updateRewardStockDisplay();
+          if (typeof saveConfig === 'function') await saveConfig();
+          updateRequestBtnState();
+        }
+
+        // 允许绕过冷却，继续本次询问
+        await handleRequestCore({ ignoreCooldown: true });
+      });
+    }
+
+    // “我没忍住”：强制许可并扣除奖励值（可扣为负）
+    forceGrantBtn.addEventListener('click', async function() {
+      // 操作前同步服务器配置
+      if (typeof loadConfig === 'function') {
+        const data = await loadConfig();
+        if (typeof applyConfigSnapshot === 'function') applyConfigSnapshot(data);
+      }
+      const evName = select.value;
+      const ev = events.find(e => e.name === evName);
+      const multiplier = (ev && ev.rewardMultiplier) ? ev.rewardMultiplier : 1;
+      const cost = 100 * multiplier;
+      rewardStock -= cost;
+      localStorage.setItem('rewardStock', rewardStock);
+      updateRewardStockDisplay();
+      if (typeof saveConfig === 'function') await saveConfig();
+      const now = Date.now()/1000;
+      ensureEventHistory(ev);
+      setEventLastGrantedTime(ev, now, 'force-grant');
+      document.getElementById('result').innerText =
+        `✅ 许可（我没忍住）\n(扣除奖励值: ${cost}，当前存量: ${rewardStock})`;
+    });
+  </script>
+</body>
+</html>

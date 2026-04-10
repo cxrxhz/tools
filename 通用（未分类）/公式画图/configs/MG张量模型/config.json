@@ -1,0 +1,17 @@
+{
+  "formula": "y = Km * (\n    3 + x * (\n        2*(1 - L11) * ( (kf/(1 + (1+2*p)*Rc*Km/d * L11*kf/Km) - Km) /\n                        (Km + L11*(kf/(1 + (1+2*p)*Rc*Km/d * L11*kf/Km) - Km)) )\n      + (1 - L33) * ( (kf/(1 + (1+2*p)*Rc*Km/d * L33*kf/Km) - Km) /\n                        (Km + L33*(kf/(1 + (1+2*p)*Rc*Km/d * L33*kf/Km) - Km)) )\n    )\n) / (\n    3 - x * (\n        2*L11 * ( (kf/(1 + (1+2*p)*Rc*Km/d * L11*kf/Km) - Km) /\n                  (Km + L11*(kf/(1 + (1+2*p)*Rc*Km/d * L11*kf/Km) - Km)) )\n      + L33 * ( (kf/(1 + (1+2*p)*Rc*Km/d * L33*kf/Km) - Km) /\n                  (Km + L33*(kf/(1 + (1+2*p)*Rc*Km/d * L33*kf/Km) - Km)) )\n    )\n)",
+  "params": {
+    "Km": "0.208",
+    "L11": "0.0591",
+    "L33": "0.8818",
+    "Rc": "5e-8",
+    "d": "1.5e-6",
+    "kf": "100",
+    "p": "1/12"
+  },
+  "xrange": [
+    0.0,
+    0.16
+  ],
+  "model_name": "MG张量模型"
+}
