@@ -924,5 +924,198 @@
                 }
             }
         }
+    },
+    {
+        "timestamp": "2025-09-18 13:57:57",
+        "records": {
+            "SiNW": {
+                "蔡司": {
+                    "new tbridge": [
+                        {
+                            "file": "1-1000-超临界.jpg",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\蔡司\\new tbridge\\1-1000-超临界.jpg",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "1-1000-超临界.jpg_meta.xml",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\蔡司\\new tbridge\\1-1000-超临界.jpg_meta.xml",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "2-500.jpg",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\蔡司\\new tbridge\\2-500.jpg",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "2-500.jpg_meta.xml",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\蔡司\\new tbridge\\2-500.jpg_meta.xml",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "3-broke.jpg",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\蔡司\\new tbridge\\3-broke.jpg",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "3-broke.jpg_meta.xml",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\蔡司\\new tbridge\\3-broke.jpg_meta.xml",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "3-broke2.jpg",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\蔡司\\new tbridge\\3-broke2.jpg",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "3-broke2.jpg_meta.xml",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\蔡司\\new tbridge\\3-broke2.jpg_meta.xml",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "SNAP-190956-0028.jpg",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\蔡司\\new tbridge\\SNAP-190956-0028.jpg",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "SNAP-190956-0028.jpg_meta.xml",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\蔡司\\new tbridge\\SNAP-190956-0028.jpg_meta.xml",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "SNAP-192824-0029.jpg",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\蔡司\\new tbridge\\SNAP-192824-0029.jpg",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "SNAP-192824-0029.jpg_meta.xml",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\蔡司\\new tbridge\\SNAP-192824-0029.jpg_meta.xml",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "SNAP-193942-0030.jpg",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\蔡司\\new tbridge\\SNAP-193942-0030.jpg",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "SNAP-193942-0030.jpg_meta.xml",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\SiNW\\蔡司\\new tbridge\\SNAP-193942-0030.jpg_meta.xml",
+                            "action": "新复制"
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        "timestamp": "2025-09-18 13:59:33",
+        "records": {
+            "MnPS3": {
+                "AFM": {
+                    "pdms": [
+                        {
+                            "file": "1.jpg",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\MnPS3\\AFM\\pdms\\1\\1.jpg",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "2.jpg",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\MnPS3\\AFM\\pdms\\1\\2.jpg",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "091125153347.SIG_HEIGHT_SENSOR_BKW.FLT",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\MnPS3\\AFM\\pdms\\1\\091125.DIR\\091125153347.SIG_HEIGHT_SENSOR_BKW.FLT",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "091125153347.SIG_HEIGHT_SENSOR_FRW.FLT",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\MnPS3\\AFM\\pdms\\1\\091125.DIR\\091125153347.SIG_HEIGHT_SENSOR_FRW.FLT",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "091125153347.SIG_TM_AMPLITUDE_FRW.FLT",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\MnPS3\\AFM\\pdms\\1\\091125.DIR\\091125153347.SIG_TM_AMPLITUDE_FRW.FLT",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "091125153347.SIG_TM_PHASE_FRW.FLT",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\MnPS3\\AFM\\pdms\\1\\091125.DIR\\091125153347.SIG_TM_PHASE_FRW.FLT",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "091125155235.SIG_HEIGHT_SENSOR_BKW.FLT",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\MnPS3\\AFM\\pdms\\1\\091125.DIR\\091125155235.SIG_HEIGHT_SENSOR_BKW.FLT",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "091125155235.SIG_HEIGHT_SENSOR_FRW.FLT",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\MnPS3\\AFM\\pdms\\1\\091125.DIR\\091125155235.SIG_HEIGHT_SENSOR_FRW.FLT",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "091125155235.SIG_TM_AMPLITUDE_FRW.FLT",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\MnPS3\\AFM\\pdms\\1\\091125.DIR\\091125155235.SIG_TM_AMPLITUDE_FRW.FLT",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "091125155235.SIG_TM_PHASE_FRW.FLT",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\MnPS3\\AFM\\pdms\\1\\091125.DIR\\091125155235.SIG_TM_PHASE_FRW.FLT",
+                            "action": "新复制"
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        "timestamp": "2025-09-18 14:10:52",
+        "records": {
+            "MnPS3": {
+                "蔡司": {
+                    "oxidation": [
+                        {
+                            "file": "1.jpg",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\MnPS3\\蔡司\\oxidation\\1.jpg",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "1.jpg_meta.xml",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\MnPS3\\蔡司\\oxidation\\1.jpg_meta.xml",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "2.jpg",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\MnPS3\\蔡司\\oxidation\\2.jpg",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "2.jpg_meta.xml",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\MnPS3\\蔡司\\oxidation\\2.jpg_meta.xml",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "3.jpg",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\MnPS3\\蔡司\\oxidation\\3.jpg",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "3.jpg_meta.xml",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\MnPS3\\蔡司\\oxidation\\3.jpg_meta.xml",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "all.jpg",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\MnPS3\\蔡司\\oxidation\\all.jpg",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "all.jpg_meta.xml",
+                            "dest": "F:/OneDrive - tongji.edu.cn/实验数据\\MnPS3\\蔡司\\oxidation\\all.jpg_meta.xml",
+                            "action": "新复制"
+                        }
+                    ]
+                }
+            }
+        }
     }
 ]

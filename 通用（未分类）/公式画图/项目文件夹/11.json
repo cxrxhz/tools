@@ -34,7 +34,7 @@
       "formula": "y = km*( 3 + x*( 2*( d*(kf - km) - 2*Rc*kf*km )/( d*(kf + km) + 2*Rc*kf*km )\n                 + ( L*(kf - km) - 2*Rc*kf*km )/( L*km + 2*Rc*kf*km ) ) )\n    / ( 3 - x*( 2*( d*(kf - km) - 2*Rc*kf*km )/( d*(kf + km) + 2*Rc*kf*km ) ) )",
       "params": {
         "L": "1e-6",
-        "Rc": "4e-8",
+        "Rc": "6e-8",
         "d": "1e-6",
         "kf": "100",
         "km": "0.208"
@@ -42,15 +42,18 @@
       "model_name": "Nan模型"
     },
     {
-      "formula": "y = km*(1 + 2*(13.3347*exp(-(13.2701*Rc)/(km*L0)))*((kf/km - 1)/(kf/km + 1))*x) / (1 - (13.3347*exp(-(13.2701*Rc)/(km*L0)))*((kf/km - 1)/(kf/km + 1))*x)",
+      "formula": "y = Km * (\n    3 + x * (\n        2*(1 - L11) * ( (kf/(1 + (1+2*p)*Rc*Km/d * L11*kf/Km) - Km) /\n                        (Km + L11*(kf/(1 + (1+2*p)*Rc*Km/d * L11*kf/Km) - Km)) )\n      + (1 - L33) * ( (kf/(1 + (1+2*p)*Rc*Km/d * L33*kf/Km) - Km) /\n                        (Km + L33*(kf/(1 + (1+2*p)*Rc*Km/d * L33*kf/Km) - Km)) )\n    )\n) / (\n    3 - x * (\n        2*L11 * ( (kf/(1 + (1+2*p)*Rc*Km/d * L11*kf/Km) - Km) /\n                  (Km + L11*(kf/(1 + (1+2*p)*Rc*Km/d * L11*kf/Km) - Km)) )\n      + L33 * ( (kf/(1 + (1+2*p)*Rc*Km/d * L33*kf/Km) - Km) /\n                  (Km + L33*(kf/(1 + (1+2*p)*Rc*Km/d * L33*kf/Km) - Km)) )\n    )\n)",
       "params": {
-        "L0": "1e-6",
-        "Rc": "2e-8",
+        "Km": "0.208",
+        "L11": "0.0591",
+        "L33": "0.8818",
+        "Rc": "5e-8",
+        "d": "1.5e-6",
         "kf": "100",
-        "km": "0.208"
+        "p": "1/12"
       },
-      "model_name": "改进Hashin–Shtrikman 模型"
+      "model_name": "MG张量模型"
     }
   ],
-  "exp_data_file": "C:/xhz/PY project/pythonProject/通用（未分类）/公式画图/configs/11.csv"
+  "exp_data_file": "G:/pythonProject/通用（未分类）/公式画图/项目文件夹/11.csv"
 }

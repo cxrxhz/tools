@@ -1,0 +1,158 @@
+{
+  "events": [
+    {
+      "askCost": 0,
+      "interval": 1,
+      "lastAskedInterval": 1,
+      "lastAskedTime": 1766749017.378,
+      "lastGrantedHistory": [
+        {
+          "at": 1766736722,
+          "reason": "set-start",
+          "ts": 0
+        },
+        {
+          "at": 1766738446,
+          "reason": "granted",
+          "ts": 1766711509
+        },
+        {
+          "at": 1766748953,
+          "reason": "granted",
+          "ts": 1766738446.216
+        },
+        {
+          "at": 1766749017,
+          "reason": "granted",
+          "ts": 1766748953.331
+        }
+      ],
+      "lastGrantedTime": 1766749017.378,
+      "name": "排尿",
+      "rewardMultiplier": 1,
+      "ruleText": "",
+      "t50": 3600,
+      "urgeLabels": {
+        "1": "几乎不想",
+        "2": "似乎有点想",
+        "3": "如果顺便的话想做",
+        "4": "明确想要做了",
+        "5": "非常想要做",
+        "6": "不做有点难以忍受",
+        "7": "需要全力忍受",
+        "8": "完全忍不住了"
+      },
+      "wTime": 1,
+      "wUrge": 1
+    },
+    {
+      "askCost": 100,
+      "interval": 86400,
+      "lastAskedInterval": 0,
+      "lastAskedTime": 0,
+      "lastGrantedHistory": [],
+      "lastGrantedTime": 0,
+      "name": "高潮",
+      "rewardMultiplier": 10,
+      "ruleText": "许可后用一次骰子，如果点数为1-5那么准许毁灭高潮，点数为6才能完整高潮",
+      "t50": 604800,
+      "urgeLabels": {
+        "1": "几乎不想",
+        "2": "似乎有点想",
+        "3": "如果顺便的话想做",
+        "4": "明确想要做了",
+        "5": "非常想要做",
+        "6": "不做有点难以忍受",
+        "7": "需要全力忍受",
+        "8": "完全忍不住了"
+      },
+      "wTime": 10,
+      "wUrge": 1
+    }
+  ],
+  "extraTasks": [
+    {
+      "cycleSeconds": 86400,
+      "desc": "乳首自慰10min或寸止后停止",
+      "id": "et_1510e6d3a48b98",
+      "lastRefillTs": 0,
+      "maxCount": 1,
+      "remaining": 0,
+      "reward": 20,
+      "startDate": "2025-12-26"
+    },
+    {
+      "cycleSeconds": 86400,
+      "desc": "至少5级尿意寸止一次",
+      "id": "et_9c3772845cf9d",
+      "lastRefillTs": 0,
+      "maxCount": 1,
+      "remaining": 0,
+      "reward": 10,
+      "startDate": "2025-12-26"
+    },
+    {
+      "cycleSeconds": 604800,
+      "desc": "寸止10次间隔30s",
+      "id": "et_920bafdceeb158",
+      "lastRefillTs": 0,
+      "maxCount": 2,
+      "remaining": 2,
+      "reward": 50,
+      "startDate": "2025-12-22"
+    }
+  ],
+  "rewardStock": 81,
+  "tasks": [
+    {
+      "id": "t_35554ded72de88",
+      "desc": "10-11喝水400ml",
+      "reward": 2,
+      "maxCount": 1,
+      "remaining": 0,
+      "cycleSeconds": 86400,
+      "startDate": "2025-12-26",
+      "lastRefillTs": 0
+    },
+    {
+      "id": "t_66f4cb56b1eb2",
+      "desc": "11-12喝水400ml",
+      "reward": 2,
+      "maxCount": 1,
+      "remaining": 0,
+      "cycleSeconds": 86400,
+      "startDate": "2025-12-26",
+      "lastRefillTs": 0
+    },
+    {
+      "id": "t_bf568b6d7238",
+      "desc": "12-13:30喝水400ml",
+      "reward": 2,
+      "maxCount": 1,
+      "remaining": 0,
+      "cycleSeconds": 86400,
+      "startDate": "2025-12-26",
+      "lastRefillTs": 1766739843
+    },
+    {
+      "id": "t_2ae3a0284686f",
+      "desc": "13:30-15喝水400ml",
+      "reward": 2,
+      "maxCount": 1,
+      "remaining": 0,
+      "cycleSeconds": 86400,
+      "startDate": "2025-12-26",
+      "lastRefillTs": 0
+    },
+    {
+      "id": "t_074ac9587e9778",
+      "desc": "15-17喝水400ml",
+      "reward": 2,
+      "maxCount": 1,
+      "remaining": 0,
+      "cycleSeconds": 86400,
+      "startDate": "2025-12-26",
+      "lastRefillTs": 0
+    }
+  ]
+}
