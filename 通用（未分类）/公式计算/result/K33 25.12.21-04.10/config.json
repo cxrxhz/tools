@@ -1,0 +1,30 @@
+{
+  "main_formula": "K33 = Km * (1 + f*(beta11*(1 - L11)*(1 + cos2phi_avg) +\n                   beta33*(1 - L33)*(1 - cos2phi_avg))) / \\\n           (1 - f*(beta11*L11*(1 + cos2phi_avg) +\n                   beta33*L33*(1 - cos2phi_avg)))",
+  "variables": {
+    "p": "p = 1/12",
+    "L11": {
+      "ref": "L11/sub_L11.json"
+    },
+    "Kc11": {
+      "ref": "Kc11/sub_Kc11.json"
+    },
+    "beta11": {
+      "ref": "beta11/sub_beta11.json"
+    },
+    "L33": {
+      "ref": "L33/sub_L33.json"
+    },
+    "Kc33": {
+      "ref": "Kc33/sub_Kc33.json"
+    },
+    "beta33": {
+      "ref": "beta33/sub_beta33.json"
+    },
+    "f": 0.16,
+    "Km": 0.208,
+    "cos2phi_avg": 0.0,
+    "Kf": 100.0,
+    "Rc": 5e-08,
+    "d": 1.25e-07
+  }
+}

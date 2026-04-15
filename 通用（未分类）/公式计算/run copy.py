@@ -17,100 +17,47 @@ class FormulaCalculatorApp:
     def __init__(self, master):
         self.master = master
         self.master.title("公式计算器")
-        self.center_window(self.master, 600, 200)
+        self.center_window(self.master, 600, 240)
         tk.Label(master, text="请输入主公式（SymPy 格式）：").pack(pady=10)
         self.formula_text = tk.Text(master, height=5, width=70)
         self.formula_text.pack()
         btn_frame = tk.Frame(master)
         btn_frame.pack(pady=10)
         tk.Button(btn_frame, text="提交公式", command=self.submit_formula).pack(side=tk.LEFT, padx=10)
-        tk.Button(btn_frame, text="读取历史文件", command=self.load_config_file).pack(side=tk.LEFT, padx=10)
+        tk.Button(btn_frame, text="读取历史文件", command=self.load_history_config).pack(side=tk.LEFT, padx=10)
         self.process_log = []
         self.resolved_values = {}
 
-    def load_config_file(self):
+    def load_history_config(self):
+        import tkinter.filedialog as fd
         import json
-        from tkinter import filedialog
-        file_path = filedialog.askopenfilename(title="选择配置文件", filetypes=[("JSON文件", "*.json")])
+        file_path = fd.askopenfilename(
+            title="选择历史配置文件",
+            filetypes=[("JSON配置文件", "config.json"), ("所有文件", "*.*")],
+            initialdir=os.path.join(os.getcwd(), "result")
+        )
         if not file_path:
             return
         try:
-            config = self._load_config_recursive(file_path)
-        except Exception as e:
-            messagebox.showerror("读取失败", f"配置文件读取失败：{e}")
-            return
-        # 清空主界面并填充公式和参数
-        self.formula_text.delete("1.0", tk.END)
-        main_formula = config.get("main_formula", "")
-        if '=' in main_formula:
-            _, right = main_formula.split('=', 1)
-            self.formula_text.insert("1.0", right.strip())
-        else:
-            self.formula_text.insert("1.0", main_formula.strip())
-        # 弹窗显示参数并允许修改，后续可扩展为自动进入赋值界面
-        param_win = tk.Toplevel(self.master)
-        param_win.title("历史参数编辑")
-        param_win.geometry("500x400")
-        tk.Label(param_win, text="参数列表（可修改后重新计算）：").pack(pady=5)
-        param_entries = {}
-        vars_dict = config.get("variables", {})
-        for idx, (k, v) in enumerate(vars_dict.items()):
-            frame = tk.Frame(param_win)
-            frame.pack(pady=2)
-            tk.Label(frame, text=f"{k} = ").pack(side=tk.LEFT)
-            entry = tk.Entry(frame, width=40)
-            entry.pack(side=tk.LEFT)
-            if isinstance(v, dict) and "ref" in v:
-                entry.insert(0, f"引用: {v['ref']}")
-                entry.config(state='readonly')
-            else:
-                entry.insert(0, str(v))
-            param_entries[k] = entry
-        def recalc():
-            # 直接用参数编辑窗口的内容进行计算
+            with open(file_path, "r", encoding="utf-8") as f:
+                config = json.load(f)
+            # 填充公式
             self.formula_text.delete("1.0", tk.END)
-            main_formula = config.get("main_formula", "")
-            if '=' in main_formula:
-                _, right = main_formula.split('=', 1)
-                self.formula_text.insert("1.0", right.strip())
+            self.formula_text.insert("1.0", config.get("main_formula", ""))
+            # 记录变量赋值
+            self.resolved_values = dict(config.get("variables", {}))
+            self.process_log = config.get("process_log", [])
+            # 自动进入赋值窗口，允许用户修改参数
+            # 重新解析公式
+            formula_input = config.get("main_formula", "").strip()
+            if '=' in formula_input:
+                lhs, rhs = formula_input.split('=', 1)
+                lhs = lhs.strip()
+                rhs = rhs.strip()
             else:
-                self.formula_text.insert("1.0", main_formula.strip())
-            self.resolved_values = {}
-            self.process_log = []
-            # 收集参数
-            param_dict = {}
-            for k, entry in param_entries.items():
-                val = entry.get().strip()
-                # 跳过只读（引用）
-                if entry.cget('state') == 'readonly':
-                    continue
-                try:
-                    num_val = float(val)
-                    param_dict[k] = num_val
-                except ValueError:
-                    param_dict[k] = val
-            # 直接用参数字典进行主公式计算
-            self._direct_calculate_with_params(param_dict)
-            param_win.destroy()
-        tk.Button(param_win, text="重新计算", command=recalc).pack(pady=10)
-
-    def _direct_calculate_with_params(self, param_dict):
-        # 直接用参数字典进行主公式和递归子公式计算
-        formula_input = self.formula_text.get("1.0", tk.END).strip()
-        # 自动补全变量名
-        if '=' in formula_input:
-            lhs, rhs = formula_input.split('=', 1)
-            lhs = lhs.strip()
-            rhs = rhs.strip()
-        else:
-            lhs = getattr(self, 'lhs', None)
-            if not lhs:
-                lhs = 'y'
-            rhs = formula_input.strip()
-            formula_input = f"{lhs} = {rhs}"
-        self.lhs = lhs
-        # 解析变量
-        try:
+                lhs = None
+                rhs = formula_input.strip()
+            self.lhs = lhs
             vars_in_expr = set(re.findall(r'\b[A-Za-z_][A-Za-z0-9_]*\b', rhs))
             math_funcs = {'sin', 'cos', 'tan', 'tanh', 'sqrt', 'log', 'exp', 'ln',
                           'sinh', 'cosh', 'asin', 'acos', 'atan', 'atanh', 'pi', 'E'}
@@ -120,123 +67,9 @@ class FormulaCalculatorApp:
             self.symbols_list = symbols(list(vars_in_expr))
             self.symbols_dict = {str(s): s for s in self.symbols_list}
             self.expr = parse_expr(rhs, local_dict=self.symbols_dict)
-            if lhs is not None and self.expr == self.symbols_dict[lhs]:
-                messagebox.showerror("错误", "公式右侧为空或格式不正确，请重新输入公式！")
-                return
-            self.process_log.append({"variable": lhs if lhs else "Main",
-                                     "formula": formula_input,
-                                     "assignments": {},
-                                     "expr": self.expr})
-        except (SympifyError, Exception) as e:
-            messagebox.showerror("错误", f"解析公式时出错：\n{e}")
-            return
-        # 直接用参数字典递归赋值
-        assignments = {}
-        formula_inputs = {}
-        # 统一变量名为字符串，优先用 param_dict 的所有变量
-        for var_str in param_dict:
-            try:
-                num_val = float(param_dict[var_str])
-                assignments[var_str] = num_val
-                self.resolved_values[var_str] = num_val
-            except ValueError:
-                formula_inputs[var_str] = param_dict[var_str]
-        def resolve_var(var, resolving_stack=None):
-            if var in self.resolved_values:
-                return self.resolved_values[var]
-            if var in assignments:
-                self.resolved_values[var] = assignments[var]
-                return assignments[var]
-            if var in formula_inputs:
-                if resolving_stack is None:
-                    resolving_stack = set()
-                if var in resolving_stack:
-                    messagebox.showerror("错误", f"变量 {var} 存在循环引用！")
-                    return None
-                resolving_stack.add(var)
-                # 检查是否为变量引用（如 a=b）
-                ref_val = formula_inputs[var]
-                ref_val_stripped = ref_val.strip()
-                # 如果是单变量名，递归引用
-                if re.fullmatch(r'[A-Za-z_][A-Za-z0-9_]*', ref_val_stripped):
-                    sub_val = resolve_var(ref_val_stripped, resolving_stack)
-                    if sub_val is None:
-                        return None
-                    self.resolved_values[var] = sub_val
-                    return sub_val
-                try:
-                    vars_in_expr = set(re.findall(r'\b[A-Za-z_][A-Za-z0-9_]*\b', ref_val))
-                    math_funcs = {'sin', 'cos', 'tan', 'tanh', 'sqrt', 'log', 'exp', 'ln',
-                                  'sinh', 'cosh', 'asin', 'acos', 'atan', 'atanh', 'pi', 'E'}
-                    vars_in_expr -= math_funcs
-                    sub_symbols = symbols(list(vars_in_expr))
-                    sub_symbols_dict = {str(s): s for s in sub_symbols}
-                    sub_expr = parse_expr(ref_val, local_dict=sub_symbols_dict)
-                    sub_assignments = {}
-                    for sub_var in vars_in_expr:
-                        sub_val = resolve_var(sub_var, resolving_stack)
-                        if sub_val is None:
-                            return None
-                        sub_assignments[sub_var] = sub_val
-                    final_val = float(N(sub_expr.subs(sub_assignments), 15))
-                    self.resolved_values[var] = final_val
-                    self.process_log.append({
-                        "variable": var,
-                        "formula": f"{var} = {ref_val}",
-                        "assignments": sub_assignments,
-                        "expr": sub_expr
-                    })
-                    return final_val
-                except Exception as e:
-                    messagebox.showerror("错误", f"变量 {var} 的公式解析失败：{e}")
-                    return None
-            messagebox.showerror("错误", f"变量 {var} 未赋值且未定义公式！")
-            return None
-        main_assignments = {}
-        for var_str in param_dict:
-            if var_str == lhs:
-                continue
-            val = resolve_var(var_str)
-            if val is None:
-                return
-            main_assignments[var_str] = val
-        # 只对主公式涉及的变量做符号替换
-        main_subs = {self.symbols_dict[k]: v for k, v in main_assignments.items() if k in self.symbols_dict}
-        main_log = next(log for log in self.process_log if log["variable"] == (lhs if lhs else "Main"))
-        main_log["assignments"].update(main_assignments)
-        final_expr = self.expr.subs(main_subs)
-        try:
-            final_value = float(N(final_expr, 15))
+            self.create_assignment_window(self.expr, self.lhs, self.symbols_dict)
         except Exception as e:
-            messagebox.showerror("错误", f"最终计算出错：{e}")
-            return
-        self.show_final_result(lhs, final_value)
-
-    def _load_config_recursive(self, file_path, loaded=None):
-        import json, os
-        if loaded is None:
-            loaded = set()
-        abspath = os.path.abspath(file_path)
-        if abspath in loaded:
-            raise RuntimeError(f"循环引用: {file_path}")
-        loaded.add(abspath)
-        with open(file_path, "r", encoding="utf-8") as f:
-            config = json.load(f)
-        # 递归加载子变量，只取等号右侧表达式
-        variables = config.get("variables", {})
-        for k, v in variables.items():
-            if isinstance(v, dict) and "ref" in v:
-                sub_path = os.path.join(os.path.dirname(file_path), v["ref"])
-                sub_config = self._load_config_recursive(sub_path, loaded)
-                sub_formula = sub_config.get("main_formula", "")
-                # 只取等号右侧
-                if '=' in sub_formula:
-                    _, right = sub_formula.split('=', 1)
-                    variables[k] = right.strip()
-                else:
-                    variables[k] = sub_formula.strip()
-        config["variables"] = variables
-        return config
+            messagebox.showerror("错误", f"读取历史配置文件失败：{e}")
 
     def center_window(self, win, width, height):
         win.update_idletasks()
@@ -248,28 +81,14 @@ class FormulaCalculatorApp:
 
     def submit_formula(self):
         formula_input = self.formula_text.get("1.0", tk.END).strip()
-        # 只在首次提交时保存原始输入
-        if not hasattr(self, 'original_formula_str') or not self.original_formula_str:
-            self.original_formula_str = formula_input
-        # 自动补全变量名，避免 y = y=1+a
-        if '=' in formula_input:
-            lhs, rhs = formula_input.split('=', 1)
-            lhs = lhs.strip()
-            rhs = rhs.strip()
-            self.main_formula_str = formula_input
-        else:
-            # 尝试从历史参数中获取变量名，否则用 'y'
-            lhs = getattr(self, 'lhs', None)
-            if not lhs:
-                # 尝试从参数区找唯一变量名
-                if hasattr(self, 'vars_needed') and self.vars_needed and len(self.vars_needed) == 1:
-                    lhs = self.vars_needed[0]
-                else:
-                    lhs = 'y'
-            rhs = formula_input.strip()
-            formula_input = f"{lhs} = {rhs}"
-            self.main_formula_str = formula_input
         try:
+            if '=' in formula_input:
+                lhs, rhs = formula_input.split('=', 1)
+                lhs = lhs.strip()
+                rhs = rhs.strip()
+            else:
+                lhs = None
+                rhs = formula_input.strip()
             self.lhs = lhs
         except Exception as e:
             messagebox.showerror("错误", f"处理公式时出错：{e}")
@@ -626,49 +445,25 @@ class FormulaCalculatorApp:
             for var, val in var_values.items():
                 f.write(f"{var}\t{val}\n")
 
-        # 保存配置文件（JSON），并确保不影响HTML保存
-        try:
-            import json
-            config = {}
-            # 主公式：只保存用户原始输入内容，避免 y = y=1+a 叠加
-            if hasattr(self, "original_formula_str") and self.original_formula_str:
-                config["main_formula"] = self.original_formula_str
-            elif hasattr(self, "main_formula_str"):
-                config["main_formula"] = self.main_formula_str
-            else:
-                config["main_formula"] = self.lhs if self.lhs else ""
-            config["variables"] = {}
-            # 记录所有变量的赋值和公式/引用
-            for step in process_log:
-                var = step["variable"]
-                if var == (lhs if lhs else "Main"):
-                    continue
-                # 如果有公式，自动为其生成独立配置文件，并在主配置中引用
-                if step.get("assignments"):
-                    sub_config = {
-                        "main_formula": step.get("formula", ""),
-                        "variables": step["assignments"]
-                    }
-                    subfolder = os.path.join(result_folder, var)
-                    if not os.path.exists(subfolder):
-                        os.makedirs(subfolder)
-                    sub_config_name = f"sub_{var}.json"
-                    sub_config_path = os.path.join(subfolder, sub_config_name)
-                    with open(sub_config_path, "w", encoding="utf-8") as fsub:
-                        json.dump(sub_config, fsub, ensure_ascii=False, indent=2)
-                    # 在主配置中用相对路径引用
-                    config["variables"][var] = {"ref": f"{var}/{sub_config_name}"}
-                else:
-                    config["variables"][var] = step.get("formula", "")
-            # 主变量赋值
-            for var, val in var_values.items():
-                if var not in config["variables"]:
-                    config["variables"][var] = val
-            config_path = os.path.join(result_folder, "config.json")
-            with open(config_path, "w", encoding="utf-8") as f:
-                json.dump(config, f, ensure_ascii=False, indent=2)
-        except Exception as e:
-            messagebox.showerror("配置文件保存失败", f"{e}")
+        # 保存配置文件（JSON）
+        import json
+        config_data = {
+            "lhs": lhs,
+            "main_formula": str(self.formula_text.get("1.0", tk.END)).strip() if hasattr(self, 'formula_text') else '',
+            "final_value": final_value,
+            "variables": var_values,
+            "process_log": [
+                {
+                    "variable": step.get("variable"),
+                    "formula": step.get("formula"),
+                    "assignments": step.get("assignments"),
+                    "expr": str(step.get("expr")) if step.get("expr") is not None else None
+                } for step in process_log
+            ]
+        }
+        config_path = os.path.join(result_folder, "config.json")
+        with open(config_path, "w", encoding="utf-8") as f:
+            json.dump(config_data, f, ensure_ascii=False, indent=2)
 
         html_path = os.path.join(result_folder, "summary.html")
         html_content = f"""<!DOCTYPE html>
