@@ -1,0 +1,68 @@
+{
+  "name": "ntfy-copilot-bridge",
+  "displayName": "Ntfy Copilot Bridge",
+  "description": "通过 ntfy 接收手机消息并推送会话结束通知，输入/输出频道均可配置",
+  "version": "0.0.4",
+  "publisher": "local",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "ntfy-bridge.start",
+        "title": "Ntfy Bridge: 开始监听手机消息"
+      },
+      {
+        "command": "ntfy-bridge.stop",
+        "title": "Ntfy Bridge: 停止监听"
+      },
+      {
+        "command": "ntfy-bridge.toggle",
+        "title": "Ntfy Bridge: 切换监听"
+      }
+    ],
+    "configuration": {
+      "title": "Ntfy Copilot Bridge",
+      "properties": {
+        "ntfyBridge.serverUrl": {
+          "type": "string",
+          "default": "https://ntfy.sh",
+          "description": "ntfy 服务地址，例如 https://ntfy.sh 或自建 ntfy 实例地址"
+        },
+        "ntfyBridge.inputTopic": {
+          "type": "string",
+          "default": "",
+          "description": "输入频道（手机 → VS Code），不能与输出频道相同。"
+        },
+        "ntfyBridge.outputTopic": {
+          "type": "string",
+          "default": "",
+          "description": "输出频道（VS Code → 手机）。"
+        },
+        "ntfyBridge.autoStart": {
+          "type": "boolean",
+          "default": true,
+          "description": "VS Code 启动时自动开始监听手机消息"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "@types/vscode": "^1.95.0",
+    "typescript": "^5.7.0"
+  }
+}

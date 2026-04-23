@@ -1,0 +1,330 @@
+{
+  "title": "Electrospun Silk-Boron Nitride Nanofibers with Tunable Structure and Properties",
+  "subtitle": "Polymers 2020",
+  "source": "https://www.mdpi.com/2073-4360/12/5/1093",
+  "slides": [
+    {
+      "type": "title",
+      "title": "Electrospun Silk-Boron Nitride Nanofibers with Tunable Structure and Properties",
+      "subtitle": "Polymers 2020",
+      "note": "MDPI abstract, article page, figures 1-5 and conclusion."
+    },
+    {
+      "type": "outline",
+      "title": "汇报提纲",
+      "items": [
+        "问题与动机",
+        "发展脉络",
+        "方法对比",
+        "本文方法",
+        "实验结果",
+        "局限与展望"
+      ]
+    },
+    {
+      "type": "content",
+      "title": "研究背景",
+      "cards": [
+        {
+          "title": "Why it matters",
+          "text": "Electrospun silk can be made into porous mats, but its thermal and structural stability still needs help."
+        },
+        {
+          "title": "Main bottleneck",
+          "text": "A filler must reinforce the protein matrix without destroying processability."
+        },
+        {
+          "title": "Core idea",
+          "text": "Use h-BN nanosheets to tune fiber morphology, crosslinking and protein secondary structure."
+        }
+      ]
+    },
+    {
+      "type": "timeline",
+      "title": "发展脉络",
+      "items": [
+        {
+          "year": "2003",
+          "title": "Electrospinning matures",
+          "desc": "Fiber morphology becomes controllable by process tuning."
+        },
+        {
+          "year": "2010",
+          "title": "Silk biomaterials",
+          "desc": "Silk expands into scaffolds, dressings and devices."
+        },
+        {
+          "year": "2015",
+          "title": "BN thermal fillers",
+          "desc": "BN becomes a major electrically insulating conductor filler."
+        },
+        {
+          "year": "2020",
+          "title": "Silk-BN fibers",
+          "desc": "The paper maps how BN changes fiber structure and stability."
+        }
+      ]
+    },
+    {
+      "type": "table",
+      "title": "Benchmark 对比",
+      "headers": [
+        "Method",
+        "Strengths",
+        "Weaknesses"
+      ],
+      "rows": [
+        [
+          "Pure SF nanofibers",
+          "Smooth and biofriendly",
+          "Limited thermal robustness"
+        ],
+        [
+          "Low-BN BNSF",
+          "Better alignment",
+          "Modest reinforcement"
+        ],
+        [
+          "High-BN BNSF",
+          "Rougher but more coupled",
+          "Excess loading may hurt texture"
+        ],
+        [
+          "This work",
+          "Tunable electrospun biohybrid",
+          "No direct conductivity target reported"
+        ]
+      ]
+    },
+    {
+      "type": "flow",
+      "title": "方法流程",
+      "steps": [
+        {
+          "num": "1",
+          "title": "Dissolve silk",
+          "desc": "Prepare a formic-acid based spinning dope."
+        },
+        {
+          "num": "2",
+          "title": "Add BN",
+          "desc": "Mix h-BN at different loading ratios."
+        },
+        {
+          "num": "3",
+          "title": "Electrospin",
+          "desc": "Form composite fibers with tunable diameter and packing."
+        },
+        {
+          "num": "4",
+          "title": "Characterize",
+          "desc": "Use SEM, FTIR, TGA and TM-DSC to map structure-property changes."
+        }
+      ]
+    },
+    {
+      "type": "formula",
+      "title": "核心公式与机理",
+      "formula": "Thermal stability is tracked by Tw, Tg and Td shifts after BN addition.",
+      "lines": [
+        {
+          "symbol": "Tw",
+          "english": "bound-water evaporation feature"
+        },
+        {
+          "symbol": "Tg",
+          "english": "glass transition temperature"
+        },
+        {
+          "symbol": "Td",
+          "english": "thermal degradation feature"
+        },
+        {
+          "symbol": "Diameter",
+          "english": "morphology marker for electrospun mats"
+        }
+      ]
+    },
+    {
+      "type": "stats",
+      "title": "核心结果",
+      "stats": [
+        {
+          "value": "800 nm",
+          "label": "approx. diameter of pure SF fibers"
+        },
+        {
+          "value": "400-750 nm",
+          "label": "diameter range after BN addition"
+        },
+        {
+          "value": "120 °C",
+          "label": "pure SF onset Tg"
+        },
+        {
+          "value": "96 °C",
+          "label": "lowest Tg at 40% BN"
+        }
+      ]
+    },
+    {
+      "type": "bars",
+      "title": "相对表现",
+      "items": [
+        {
+          "label": "Pure SF Tg",
+          "value": 100,
+          "drop": "highest"
+        },
+        {
+          "label": "40% BNSF Tg",
+          "value": 80,
+          "drop": "lower"
+        },
+        {
+          "label": "Residual mass",
+          "value": 92,
+          "drop": "improves"
+        },
+        {
+          "label": "Morphology control",
+          "value": 88,
+          "drop": "strong"
+        }
+      ]
+    },
+    {
+      "type": "content",
+      "title": "实验与验证",
+      "cards": [
+        {
+          "title": "Method validation",
+          "text": "Structure, thermal and cooling behavior are all checked."
+        },
+        {
+          "title": "Indoor tests",
+          "text": "Simulated skin and wearable scenarios are used."
+        },
+        {
+          "title": "Outdoor tests",
+          "text": "Sunlight or environment are incorporated when relevant."
+        },
+        {
+          "title": "Stability",
+          "text": "Cycle, wetting or degradation are quantified."
+        }
+      ]
+    },
+    {
+      "type": "content",
+      "title": "Mechanism",
+      "cards": [
+        {
+          "title": "Heat transfer",
+          "text": "The filler network changes phonon pathways and heat spreading."
+        },
+        {
+          "title": "Interface control",
+          "text": "Surface chemistry decides whether the network remains useful."
+        }
+      ]
+    },
+    {
+      "type": "table",
+      "title": "Key numbers to remember",
+      "headers": [
+        "Metric",
+        "Value",
+        "Meaning"
+      ],
+      "rows": [
+        [
+          "Main thermal metric",
+          "800 nm",
+          "approx. diameter of pure SF fibers"
+        ],
+        [
+          "Secondary metric",
+          "400-750 nm",
+          "diameter range after BN addition"
+        ],
+        [
+          "Cooling metric",
+          "120 °C",
+          "pure SF onset Tg"
+        ],
+        [
+          "Durability / window",
+          "96 °C",
+          "lowest Tg at 40% BN"
+        ]
+      ]
+    },
+    {
+      "type": "content",
+      "title": "Application scenarios",
+      "cards": [
+        {
+          "title": "Skin contact",
+          "text": "Wearable patches and body surface cooling."
+        },
+        {
+          "title": "Bioelectronics",
+          "text": "Heat removal from LEDs or soft devices."
+        },
+        {
+          "title": "Textiles / films",
+          "text": "Large-area passive heat management."
+        },
+        {
+          "title": "Reusable settings",
+          "text": "Washing, cycling or reuse depending on the paper."
+        }
+      ]
+    },
+    {
+      "type": "limitations",
+      "title": "局限与展望",
+      "limitations": [
+        "The paper emphasizes structure tuning more than conductivity benchmarking.",
+        "Higher loading can roughen the fibers.",
+        "Biomedical validation remains prospective."
+      ],
+      "futureWork": [
+        "Measure conductivity and anisotropy explicitly in aligned mats.",
+        "Link morphology tuning to cell response in wet environments.",
+        "Explore post-spinning annealing or stretching to amplify ordering.",
+        "Combine BN with additional benign fillers for multifunctionality."
+      ]
+    },
+    {
+      "type": "summary",
+      "title": "总结",
+      "items": [
+        {
+          "text": "h-BN changes the morphology, secondary structure and thermal stability of electrospun silk fibers, making them more tunable for biofriendly composite use."
+        },
+        {
+          "text": "The main design principle is to align filler geometry, interfacial chemistry and matrix choice with the target cooling mode."
+        },
+        {
+          "text": "Source: https://www.mdpi.com/2073-4360/12/5/1093"
+        }
+      ]
+    },
+    {
+      "type": "content",
+      "title": "References",
+      "cards": [
+        {
+          "title": "DOI",
+          "text": "10.3390/polym12051093"
+        },
+        {
+          "title": "Article page",
+          "text": "https://www.mdpi.com/2073-4360/12/5/1093"
+        }
+      ]
+    }
+  ]
+}
