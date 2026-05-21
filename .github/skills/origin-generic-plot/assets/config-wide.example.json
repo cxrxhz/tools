@@ -1,0 +1,21 @@
+{
+  "input_path": "./example-wide-table.csv",
+  "layout": "wide",
+  "plot_type": "column",
+  "worksheet_name": "Cr2Te3 LFA Data",
+  "graph_name": "Cr2Te3 LFA Plot",
+  "x_column": "sample_number",
+  "y_columns": ["mean_diffusivity_mm2_s"],
+  "sample_names": ["Cr2Te3"],
+  "x_axis": {
+    "name": "Sample Number",
+    "unit": ""
+  },
+  "y_axis": {
+    "name": "Thermal Diffusivity",
+    "unit": "mm^2/s"
+  },
+  "normalized_output_csv": "./out/cr2te3_lfa_normalized.csv",
+  "save_project": "./out/Cr2Te3_LFA_plot.opju",
+  "show_origin": false
+}

@@ -6,3 +6,8 @@ node_modules/**
 .gitignore
 tsconfig.json
 out/**
+release-*/**
+*.zip
+*.vsix
+*.bak
+test_*

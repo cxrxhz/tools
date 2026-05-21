@@ -1,8 +1,8 @@
 {
   "name": "ntfy-copilot-bridge",
   "displayName": "Ntfy Copilot Bridge",
-  "description": "通过 ntfy 接收手机消息并推送会话结束通知，输入/输出频道均可配置",
-  "version": "0.0.4",
+  "description": "通过 ntfy 接收手机消息、推送会话回复（含图片附件），内置 Web 查看器",
+  "version": "3.0.0",
   "publisher": "local",
   "engines": {
     "vscode": "^1.95.0"
@@ -27,6 +27,10 @@
       {
         "command": "ntfy-bridge.toggle",
         "title": "Ntfy Bridge: 切换监听"
+      },
+      {
+        "command": "ntfy-bridge.openViewer",
+        "title": "Ntfy Bridge: 打开 Web 查看器"
       }
     ],
     "configuration": {
@@ -39,18 +43,58 @@
         },
         "ntfyBridge.inputTopic": {
           "type": "string",
-          "default": "",
-          "description": "输入频道（手机 → VS Code），不能与输出频道相同。"
+          "default": "default_in",
+          "description": "输入频道（手机 → VS Code），不能与输出频道相同。默认 default_in"
         },
         "ntfyBridge.outputTopic": {
           "type": "string",
-          "default": "",
-          "description": "输出频道（VS Code → 手机）。"
+          "default": "default",
+          "description": "输出频道（VS Code → 手机）。默认 default"
         },
         "ntfyBridge.autoStart": {
           "type": "boolean",
           "default": true,
           "description": "VS Code 启动时自动开始监听手机消息"
+        },
+        "ntfyBridge.defaultTarget": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "copilot",
+            "codex"
+          ],
+          "default": "auto",
+          "description": "手机消息未显式指定目标时的默认路由。auto=发送到当前激活聊天；copilot/codex=自动添加目标前缀"
+        },
+        "ntfyBridge.copilotMention": {
+          "type": "string",
+          "default": "@copilot",
+          "description": "当目标为 Copilot 时自动加在消息前的前缀。若你的环境使用其他 participant 名称，可在此覆盖"
+        },
+        "ntfyBridge.codexMention": {
+          "type": "string",
+          "default": "@codex",
+          "description": "当目标为 Codex 时自动加在消息前的前缀。若你的环境使用其他 participant 名称，可在此覆盖"
+        },
+        "ntfyBridge.forwardImages": {
+          "type": "boolean",
+          "default": true,
+          "description": "自动将回复中引用的图片作为 ntfy 附件上传到手机"
+        },
+        "ntfyBridge.viewerEnabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "启用本地 Web 查看器（手机浏览器查看完整回复含图片）"
+        },
+        "ntfyBridge.viewerPort": {
+          "type": "number",
+          "default": 19199,
+          "description": "Web 查看器端口"
+        },
+        "ntfyBridge.viewerHost": {
+          "type": "string",
+          "default": "0.0.0.0",
+          "description": "Web 查看器绑定地址（0.0.0.0 允许局域网访问，127.0.0.1 仅本机）"
         }
       }
     }

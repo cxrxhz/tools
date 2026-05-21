@@ -1117,5 +1117,36 @@
                 }
             }
         }
+    },
+    {
+        "timestamp": "2026-05-11 15:39:19",
+        "records": {
+            "SiNW": {
+                "蔡司": {
+                    "nangjing": [
+                        {
+                            "file": "B2-5-3.jpg",
+                            "dest": "F:/OneDrive - 草莓甜品屋/实验数据\\SiNW\\蔡司\\nangjing\\B2-5-3.jpg",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "B2-5-3.jpg_meta.xml",
+                            "dest": "F:/OneDrive - 草莓甜品屋/实验数据\\SiNW\\蔡司\\nangjing\\B2-5-3.jpg_meta.xml",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "B3-4-4.jpg",
+                            "dest": "F:/OneDrive - 草莓甜品屋/实验数据\\SiNW\\蔡司\\nangjing\\B3-4-4.jpg",
+                            "action": "新复制"
+                        },
+                        {
+                            "file": "B3-4-4.jpg_meta.xml",
+                            "dest": "F:/OneDrive - 草莓甜品屋/实验数据\\SiNW\\蔡司\\nangjing\\B3-4-4.jpg_meta.xml",
+                            "action": "新复制"
+                        }
+                    ]
+                }
+            }
+        }
     }
 ]

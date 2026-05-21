@@ -1,0 +1,21 @@
+{
+  "input_path": "./example-long-table.csv",
+  "layout": "long",
+  "plot_type": "line-symbol",
+  "worksheet_name": "Origin Plot Data",
+  "graph_name": "Temperature Comparison",
+  "x_column": "temperature_c",
+  "y_column": "diffusivity_mm2_s",
+  "group_column": "sample_name",
+  "sample_names": ["B1", "B2", "B3"],
+  "x_axis": {
+    "name": "Temperature",
+    "unit": "C"
+  },
+  "y_axis": {
+    "name": "Thermal Diffusivity",
+    "unit": "mm^2/s"
+  },
+  "save_project": "./out/temperature_comparison.opju",
+  "show_origin": false
+}

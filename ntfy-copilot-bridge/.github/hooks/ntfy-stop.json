@@ -1,0 +1,11 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "type": "command",
+        "command": "node .github/hooks/ntfy-stop.js",
+        "timeout": 30
+      }
+    ]
+  }
+}
